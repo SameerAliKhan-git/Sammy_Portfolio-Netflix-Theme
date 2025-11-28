@@ -1,0 +1,9 @@
+# robots.txt for Sameer Ali Khan Portfolio
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://sameeralikhan.com/sitemap.xml
+
+# Disallow admin or API routes from indexing
+Disallow: /api/

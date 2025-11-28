@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>Sameer Ali Khan | Full Stack Developer & Cloud Enthusiast</title>
+    <meta name="title" content="Sameer Ali Khan | Full Stack Developer & Cloud Enthusiast">
+    <meta name="description" content="Results-driven Full Stack Developer with expertise in Python, React, Node.js, and cloud platforms (GCP, Azure). View my projects and get in touch!">
+    <meta name="keywords" content="Sameer Ali Khan, Full Stack Developer, Python Developer, React Developer, Node.js, Flask, Django, Cloud Developer, GCP, Azure, Portfolio, Hyderabad">
+    <meta name="author" content="Sameer Ali Khan">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Theme & App -->
+    <meta name="theme-color" content="#E50914">
+    <meta name="msapplication-TileColor" content="#141414">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sameeralikhan.com/">
+    <meta property="og:title" content="Sameer Ali Khan | Full Stack Developer & Cloud Enthusiast">
+    <meta property="og:description" content="Results-driven Full Stack Developer with expertise in Python, React, Node.js, and cloud platforms. View my projects and let's connect!">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sameer Ali Khan | Full Stack Developer & Cloud Enthusiast">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sameer Ali Khan",
+        "alternateName": "Sammy",
+        "url": "https://sameeralikhan.com",
+        "jobTitle": "Full Stack Developer",
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Osmania University"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Hyderabad",
+            "addressRegion": "Telangana",
+            "addressCountry": "India"
+        },
+        "email": "sammysameerkhan007@gmail.com",
+        "sameAs": [
+            "https://linkedin.com/in/sameer-ali-khan-414207219",
+            "https://github.com/SameerAliKhan-git",
+            "https://www.instagram.com/sam.mykhan007/"
+        ]
+    }
+    </script>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+    
+    <!-- Noise Overlay for Premium Look -->
+    <div class="noise-overlay"></div>
+
+    <!-- Loader -->
+    <div id="loader" class="loader">
+        <div class="loader-content">
+            <div class="sak-logo">
+                <span class="letter letter-s">S</span>
+                <span class="letter letter-a">A</span>
+                <span class="letter letter-k">K</span>
+            </div>
+        </div>
+        <div class="loader-bar">
+            <div class="loader-progress" id="loaderProgress">
+                <span class="loader-percent" id="loaderPercent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fixed Left Social Sidebar -->
+    <div class="social-sidebar">
+        <a href="https://linkedin.com/in/sameer-ali-khan-414207219" target="_blank" class="sidebar-social-link" aria-label="LinkedIn">
+            <i class="fab fa-linkedin-in"></i>
+            <span class="social-tooltip">LinkedIn</span>
+        </a>
+        <a href="https://github.com/SameerAliKhan-git" target="_blank" class="sidebar-social-link" aria-label="GitHub">
+            <i class="fab fa-github"></i>
+            <span class="social-tooltip">GitHub</span>
+        </a>
+        <a href="mailto:sammysameerkhan007@gmail.com" class="sidebar-social-link" aria-label="Email">
+            <i class="fas fa-envelope"></i>
+            <span class="social-tooltip">Email</span>
+        </a>
+        <a href="https://www.instagram.com/sam.mykhan007/" target="_blank" class="sidebar-social-link" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+            <span class="social-tooltip">Instagram</span>
+        </a>
+        <a href="https://wa.me/917382898751?text=Hii%2C%20Sammy.%20I%20am%20being%20Redirected%20to%20you%20by%20your%20portfolio%20Website" target="_blank" class="sidebar-social-link whatsapp" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+            <span class="social-tooltip">WhatsApp</span>
+        </a>
+        <div class="sidebar-line"></div>
+    </div>
+
+    <!-- Email Sidebar (Right) -->
+    <div class="email-sidebar">
+        <a href="mailto:sammysameerkhan007@gmail.com" class="email-link">sammysameerkhan007@gmail.com</a>
+        <div class="sidebar-line"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo magnetic">
+                <span class="logo-text shimmer-text">SAMMY</span>
+                <span class="logo-dot"></span>
+            </a>
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active" data-text="Home">Home</a>
+                <a href="#about" class="nav-link" data-text="About">About</a>
+                <a href="#experience" class="nav-link" data-text="Experience">Experience</a>
+                <a href="#skills" class="nav-link" data-text="Skills">Skills</a>
+                <a href="#services" class="nav-link" data-text="Services">Services</a>
+                <a href="#projects" class="nav-link" data-text="Projects">Projects</a>
+                <a href="#leadership" class="nav-link" data-text="Leadership">Leadership</a>
+                <a href="#contact" class="nav-link" data-text="Contact">Contact</a>
+                <a href="/api/download-resume" class="nav-btn glass-btn glow-pulse" download="Sameer_Ali_Khan_Resume.pdf">
+                    <i class="fas fa-file-download"></i>
+                    <span>Resume</span>
+                </a>
+                <div class="nav-profile" style="margin-left: 10px; cursor: pointer;" title="Sammy's Profile">
+                    <div style="width: 35px; height: 35px; background: #E50914; border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; opacity: 1;">
+                    </div>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-grid"></div>
+            <div class="hero-glow"></div>
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
+            </div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge glass-card">
+                <span class="badge-dot"></span>
+                <span>Available for Opportunities</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line animate-text">Hi, I'm</span>
+                <span class="title-name glitch" data-text="Sameer Ali Khan">Sameer Ali Khan</span>
+            </h1>
+            <div class="hero-roles">
+                <span class="role-prefix">I'm a</span>
+                <span class="role-text" id="roleText">Full Stack Developer</span>
+                <span class="role-cursor">|</span>
+            </div>
+            <p class="hero-description">
+                Results-driven Computer Science graduate with expertise in 
+                <span class="highlight">Python</span>, <span class="highlight">React</span>, 
+                <span class="highlight">Node.js</span>, and cloud platforms like 
+                <span class="highlight">GCP</span> & <span class="highlight">Azure</span>.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn btn-netflix-primary magnetic">
+                    <span class="btn-icon"><i class="fas fa-play"></i></span>
+                    <span class="btn-text">View Projects</span>
+                </a>
+                <a href="#about" class="btn btn-netflix-secondary magnetic">
+                    <span class="btn-icon"><i class="fas fa-info-circle"></i></span>
+                    <span class="btn-text">More Info</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item glass-card">
+                    <span class="stat-number" data-count="10">0</span>
+                    <span class="stat-plus">+</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat-item glass-card">
+                    <span class="stat-number" data-count="5">0</span>
+                    <span class="stat-plus">+</span>
+                    <span class="stat-label">Certifications</span>
+                </div>
+                <div class="stat-item glass-card">
+                    <span class="stat-number" data-count="3">0</span>
+                    <span class="stat-plus">+</span>
+                    <span class="stat-label">Years Learning</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span class="scroll-text">Scroll Down</span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">01.</span>
+                <h2 class="section-title">About Me</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-content">
+                <div class="about-image" data-tilt>
+                    <div class="top-10-badge">
+                        TOP
+                        <span>#1</span>
+                    </div>
+                    <div class="image-wrapper glass-card">
+                        <div class="image-placeholder">
+                            <div class="placeholder-icon">
+                                <i class="fas fa-user-astronaut"></i>
+                            </div>
+                            <div class="image-overlay"></div>
+                        </div>
+                        <div class="image-frame"></div>
+                        <div class="image-dots"></div>
+                    </div>
+                    <div class="about-experience-badge glass-card">
+                        <span class="exp-number">3+</span>
+                        <span class="exp-text">Years of<br>Learning</span>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3 class="about-subtitle">
+                        <span class="text-gradient">Results-driven developer</span> with expertise in full-stack development
+                    </h3>
+                    <p class="about-description">
+                        I'm a Computer Science graduate student at Osmania University with hands-on experience in 
+                        full-stack web development, cloud platforms, and database management. Proven track record 
+                        of developing scalable applications serving 500+ users and leading technical teams.
+                    </p>
+                    <p class="about-description">
+                        Skilled in Python, Java, Flask, Django, and cloud technologies with strong expertise in 
+                        REST API development and database optimization. Currently pursuing M.Sc in Computer Science 
+                        while actively contributing to real-world projects.
+                    </p>
+                    <div class="about-highlights">
+                        <div class="highlight-item glass-card">
+                            <div class="highlight-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <strong>Education</strong>
+                                <span>M.Sc CS (Pursuing), Osmania University</span>
+                            </div>
+                        </div>
+                        <div class="highlight-item glass-card">
+                            <div class="highlight-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <strong>Location</strong>
+                                <span>Hyderabad, Telangana, India</span>
+                            </div>
+                        </div>
+                        <div class="highlight-item glass-card">
+                            <div class="highlight-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <strong>Experience</strong>
+                                <span>500+ users served with scalable apps</span>
+                            </div>
+                        </div>
+                        <div class="highlight-item glass-card">
+                            <div class="highlight-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="highlight-content">
+                                <strong>Ideal Professional</strong>
+                                <span>Dedicated, punctual & team-oriented</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-tech">
+                        <span class="tech-label">Technologies I work with:</span>
+                        <div class="tech-list">
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> Python</span>
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> JavaScript</span>
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> React</span>
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> Node.js</span>
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> Flask/Django</span>
+                            <span class="tech-item"><i class="fas fa-caret-right"></i> PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section experience" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">02.</span>
+                <h2 class="section-title">Experience</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-line">
+                    <div class="timeline-progress" id="timelineProgress"></div>
+                </div>
+                <!-- Work Experience -->
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-pulse"></div>
+                    </div>
+                    <div class="timeline-content glass-card">
+                        <div class="timeline-header">
+                            <span class="timeline-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                April 2025 - June 2025
+                            </span>
+                            <span class="timeline-type">Work</span>
+                        </div>
+                        <h3 class="timeline-title">Python Developer Intern</h3>
+                        <span class="timeline-company">
+                            <i class="fas fa-building"></i>
+                            Mantarang Edtech LLP, Hyderabad
+                        </span>
+                        <p class="timeline-description">
+                            Architected Flask-based attendance tracking system managing 500+ users, reducing administrative processing time by 7 hours weekly. 
+                            Developed automated SMS and email notification system processing 200+ daily alerts. Collaborated with 8-member cross-functional team implementing JWT-based authentication.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">Flask</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">REST APIs</span>
+                            <span class="tag">JWT</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- M.Sc Education -->
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-pulse"></div>
+                    </div>
+                    <div class="timeline-content glass-card">
+                        <div class="timeline-header">
+                            <span class="timeline-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                2024 - 2026 (Expected)
+                            </span>
+                            <span class="timeline-type education">Education</span>
+                        </div>
+                        <h3 class="timeline-title">M.Sc Computer Science</h3>
+                        <span class="timeline-company">
+                            <i class="fas fa-university"></i>
+                            Osmania University, Hyderabad
+                        </span>
+                        <p class="timeline-description">
+                            Pursuing Master's degree with focus on Operating Systems, Advanced Java, Automata Theory, 
+                            Computer Networks, Data Structures and Algorithms. Active member of React Club.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">Advanced Java</span>
+                            <span class="tag">OS</span>
+                            <span class="tag">Networks</span>
+                            <span class="tag">DSA</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- B.Sc Education -->
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-pulse"></div>
+                    </div>
+                    <div class="timeline-content glass-card">
+                        <div class="timeline-header">
+                            <span class="timeline-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                2021 - 2024
+                            </span>
+                            <span class="timeline-type education">Education</span>
+                        </div>
+                        <h3 class="timeline-title">B.Sc - Mathematics, Physics, Computer Science</h3>
+                        <span class="timeline-company">
+                            <i class="fas fa-university"></i>
+                            Sree Anantha Padmanabha College (Osmania University)
+                        </span>
+                        <p class="timeline-description">
+                            Graduated with GPA: 8.47/10.0. Relevant coursework: C, C++, Data Structures and Algorithms, 
+                            Database Management Systems, Web Development.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">C/C++</span>
+                            <span class="tag">DSA</span>
+                            <span class="tag">DBMS</span>
+                            <span class="tag">Web Dev</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Certifications -->
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="timeline-marker">
+                        <div class="marker-dot"></div>
+                        <div class="marker-pulse"></div>
+                    </div>
+                    <div class="timeline-content glass-card">
+                        <div class="timeline-header">
+                            <span class="timeline-date">
+                                <i class="fas fa-calendar-alt"></i>
+                                2023 - 2024
+                            </span>
+                            <span class="timeline-type certification">Certifications</span>
+                        </div>
+                        <h3 class="timeline-title">Professional Certifications</h3>
+                        <span class="timeline-company">
+                            <i class="fas fa-certificate"></i>
+                            Google, Microsoft, Cisco, LinkedIn
+                        </span>
+                        <p class="timeline-description">
+                            Google Cloud Innovator • Microsoft Azure Fundamentals • 
+                            Introduction to Data Science (Cisco) • Introduction to Cybersecurity (Cisco) • 
+                            Generative AI and Ethics in AI (LinkedIn Learning)
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">GCP</span>
+                            <span class="tag">Azure</span>
+                            <span class="tag">Data Science</span>
+                            <span class="tag">Cybersecurity</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section skills" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">03.</span>
+                <h2 class="section-title">Skills</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="skills-wrapper">
+                <div class="skills-grid">
+                    <div class="skill-category glass-card" data-aos="fade-up">
+                        <div class="category-header">
+                            <div class="category-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h3 class="category-title">Languages</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-python"></i>
+                                        <span>Python</span>
+                                    </div>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-js-square"></i>
+                                        <span>JavaScript</span>
+                                    </div>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-java"></i>
+                                        <span>Java</span>
+                                    </div>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fas fa-database"></i>
+                                        <span>SQL</span>
+                                    </div>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category glass-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="category-header">
+                            <div class="category-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <h3 class="category-title">Frontend</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-react"></i>
+                                        <span>React</span>
+                                    </div>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-html5"></i>
+                                        <span>HTML5</span>
+                                    </div>
+                                    <span class="skill-percent">95%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="95"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-css3-alt"></i>
+                                        <span>CSS3/SASS</span>
+                                    </div>
+                                    <span class="skill-percent">90%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fas fa-wind"></i>
+                                        <span>Tailwind</span>
+                                    </div>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category glass-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="category-header">
+                            <div class="category-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <h3 class="category-title">Backend</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-node-js"></i>
+                                        <span>Node.js</span>
+                                    </div>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-python"></i>
+                                        <span>Flask</span>
+                                    </div>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-python"></i>
+                                        <span>Django</span>
+                                    </div>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fas fa-database"></i>
+                                        <span>PostgreSQL</span>
+                                    </div>
+                                    <span class="skill-percent">80%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="80"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category glass-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="category-header">
+                            <div class="category-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <h3 class="category-title">Cloud & Tools</h3>
+                        </div>
+                        <div class="skill-items">
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-google"></i>
+                                        <span>GCP</span>
+                                    </div>
+                                    <span class="skill-percent">75%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-microsoft"></i>
+                                        <span>Azure</span>
+                                    </div>
+                                    <span class="skill-percent">70%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="70"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-git-alt"></i>
+                                        <span>Git</span>
+                                    </div>
+                                    <span class="skill-percent">85%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-info">
+                                    <div class="skill-name">
+                                        <i class="fab fa-docker"></i>
+                                        <span>Docker</span>
+                                    </div>
+                                    <span class="skill-percent">70%</span>
+                                </div>
+                                <div class="skill-bar">
+                                    <div class="skill-progress" data-width="70"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skills Stats -->
+                <div class="skills-stats">
+                    <div class="skill-stat glass-card" data-aos="fade-up">
+                        <i class="fas fa-code skill-stat-icon"></i>
+                        <span class="skill-stat-number">15+</span>
+                        <span class="skill-stat-label">Technologies</span>
+                    </div>
+                    <div class="skill-stat glass-card" data-aos="fade-up" data-aos-delay="100">
+                        <i class="fas fa-certificate skill-stat-icon"></i>
+                        <span class="skill-stat-number">5+</span>
+                        <span class="skill-stat-label">Certifications</span>
+                    </div>
+                    <div class="skill-stat glass-card" data-aos="fade-up" data-aos-delay="200">
+                        <i class="fas fa-project-diagram skill-stat-icon"></i>
+                        <span class="skill-stat-number">10+</span>
+                        <span class="skill-stat-label">Projects</span>
+                    </div>
+                    <div class="skill-stat glass-card" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-clock skill-stat-icon"></i>
+                        <span class="skill-stat-number">3+</span>
+                        <span class="skill-stat-label">Years Learning</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section services" id="services">
+        <div class="container" style="max-width: 100%; padding: 0 4%;">
+            <div class="section-header" style="margin-bottom: 10px;">
+                <span class="section-number" style="display: block; font-size: 16px; color: var(--primary); margin-bottom: 5px; font-family: var(--font-mono);">04.</span>
+                <h2 class="netflix-section-title">Services I Offer</h2>
+                <p style="color: rgba(255,255,255,0.7); margin-top: 10px; font-size: 18px;">Freelance solutions tailored to your business needs</p>
+            </div>
+            
+            <div class="netflix-row">
+                <!-- Service 1: Full Stack Development -->
+                <article class="netflix-card">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #E50914, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-layer-group" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-check"></i></div>
+                            <div class="action-btn"><i class="fas fa-star"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">Expert</span>
+                            <span class="age-rating">React</span>
+                            <span class="age-rating">Node.js</span>
+                            <span class="age-rating">Python</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>End-to-End</span>
+                            <span>•</span>
+                            <span>Scalable</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">Full Stack Development</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 8px;">Complete web applications from frontend to backend with modern tech stacks</p>
+                    </div>
+                </article>
+
+                <!-- Service 2: Cloud Solutions -->
+                <article class="netflix-card">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #00d4aa, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-cloud" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-check"></i></div>
+                            <div class="action-btn"><i class="fas fa-star"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">Certified</span>
+                            <span class="age-rating">GCP</span>
+                            <span class="age-rating">Azure</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Deployment</span>
+                            <span>•</span>
+                            <span>DevOps</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">Cloud Solutions</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 8px;">Cloud migration, deployment automation, and infrastructure management</p>
+                    </div>
+                </article>
+
+                <!-- Service 3: Business Automation -->
+                <article class="netflix-card">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #0077ff, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-cogs" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-check"></i></div>
+                            <div class="action-btn"><i class="fas fa-star"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">Custom</span>
+                            <span class="age-rating">Python</span>
+                            <span class="age-rating">APIs</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Streamlined</span>
+                            <span>•</span>
+                            <span>Efficient</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">Business Automation</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 8px;">Custom workflows, data processing, and integration solutions for your business</p>
+                    </div>
+                </article>
+
+                <!-- Service 4: UI/UX Design -->
+                <article class="netflix-card">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #ff6b00, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-palette" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-check"></i></div>
+                            <div class="action-btn"><i class="fas fa-star"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">Premium</span>
+                            <span class="age-rating">Modern</span>
+                            <span class="age-rating">Responsive</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Interactive</span>
+                            <span>•</span>
+                            <span>Animated</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">UI/UX Design</h3>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 8px;">Beautiful, user-centric interfaces with smooth animations and micro-interactions</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="section projects" id="projects">
+        <div class="container" style="max-width: 100%; padding: 0 4%;">
+            <div class="section-header" style="margin-bottom: 10px;">
+                <span class="section-number" style="display: block; font-size: 16px; color: var(--primary); margin-bottom: 5px; font-family: var(--font-mono);">05.</span>
+                <h2 class="netflix-section-title">Trending Now</h2>
+            </div>
+            
+            <div class="netflix-row">
+                <!-- Project 1: NGO App -->
+                <article class="netflix-card" onclick="window.open('https://github.com/SameerAliKhan-git', '_blank')">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #E50914, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-hands-helping" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-play"></i></div>
+                            <div class="action-btn"><i class="fas fa-plus"></i></div>
+                            <div class="action-btn" style="margin-left: auto; border-color: rgba(255,255,255,0.5);"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">98% Match</span>
+                            <span class="age-rating">TS</span>
+                            <span class="age-rating">React</span>
+                            <span class="age-rating">Node</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Full Stack</span>
+                            <span>•</span>
+                            <span>Secure</span>
+                            <span>•</span>
+                            <span>Prisma</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">NGO Web App</h3>
+                    </div>
+                </article>
+
+                <!-- Project 2: Attendance Portal -->
+                <article class="netflix-card" onclick="window.open('https://github.com/SameerAliKhan-git', '_blank')">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #00d4aa, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-check" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-play"></i></div>
+                            <div class="action-btn"><i class="fas fa-plus"></i></div>
+                            <div class="action-btn" style="margin-left: auto; border-color: rgba(255,255,255,0.5);"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">95% Match</span>
+                            <span class="age-rating">Flask</span>
+                            <span class="age-rating">SQL</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Dashboard</span>
+                            <span>•</span>
+                            <span>Role-Based</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">Attendance Portal</h3>
+                    </div>
+                </article>
+
+                <!-- Project 3: VS Code Clone -->
+                <article class="netflix-card" onclick="window.open('https://github.com/SameerAliKhan-git', '_blank')">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #0077ff, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-code" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-play"></i></div>
+                            <div class="action-btn"><i class="fas fa-plus"></i></div>
+                            <div class="action-btn" style="margin-left: auto; border-color: rgba(255,255,255,0.5);"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">99% Match</span>
+                            <span class="age-rating">HTML</span>
+                            <span class="age-rating">CSS</span>
+                            <span class="age-rating">JS</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Pixel Perfect</span>
+                            <span>•</span>
+                            <span>Responsive</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">VS Code Clone</h3>
+                    </div>
+                </article>
+
+                <!-- Project 4: Portfolio -->
+                <article class="netflix-card" onclick="window.open('https://github.com/SameerAliKhan-git', '_blank')">
+                    <div class="netflix-card-image" style="background: linear-gradient(45deg, #E50914, #000); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-briefcase" style="font-size: 60px; color: white;"></i>
+                    </div>
+                    <div class="netflix-card-content">
+                        <div class="card-actions">
+                            <div class="action-btn"><i class="fas fa-play"></i></div>
+                            <div class="action-btn"><i class="fas fa-plus"></i></div>
+                            <div class="action-btn" style="margin-left: auto; border-color: rgba(255,255,255,0.5);"><i class="fas fa-chevron-down"></i></div>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <span class="match-score">100% Match</span>
+                            <span class="age-rating">Netflix</span>
+                            <span class="age-rating">UI</span>
+                        </div>
+                        <div class="tech-badges">
+                            <span>Premium</span>
+                            <span>•</span>
+                            <span>Interactive</span>
+                        </div>
+                        <h3 class="card-title" style="margin-top: 8px;">Portfolio Website</h3>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership & Volunteer Section -->
+    <section class="section leadership" id="leadership">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">06.</span>
+                <h2 class="section-title">Leadership & Volunteering</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="leadership-grid">
+                <!-- React Club -->
+                <div class="leadership-card glass-card" data-aos="fade-up">
+                    <div class="leadership-icon">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <div class="leadership-content">
+                        <h3 class="leadership-title">Member - React Club</h3>
+                        <span class="leadership-org">Osmania University</span>
+                        <span class="leadership-date">2024 - Present</span>
+                        <ul class="leadership-points">
+                            <li>Spearheaded 12+ team-led web development projects</li>
+                            <li>Delivered 8+ technical workshops on React and modern JavaScript</li>
+                            <li>Orchestrated 3 major hackathon projects</li>
+                            <li>Mentored junior developers in React ecosystem</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Volunteer Experience -->
+                <div class="leadership-card glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="leadership-icon volunteer">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="leadership-content">
+                        <h3 class="leadership-title">Volunteer</h3>
+                        <span class="leadership-org">Mahima Ministries</span>
+                        <span class="leadership-date">August 2017 - Present</span>
+                        <ul class="leadership-points">
+                            <li>Championed support initiatives for 50+ children and elderly residents</li>
+                            <li>Directed 15+ community outreach programs</li>
+                            <li>Mentored 25+ at-risk youth</li>
+                            <li>Managed 10-person volunteer teams during crisis response</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">07.</span>
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info" data-aos="fade-right">
+                    <h3 class="contact-subtitle">Let's work together</h3>
+                    <p class="contact-description">
+                        I'm currently looking for new opportunities. Whether you have a question, 
+                        a project idea, or just want to say hi, feel free to reach out!
+                    </p>
+                    <div class="contact-details">
+                        <a href="mailto:sammysameerkhan007@gmail.com" class="contact-item glass-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">Email</span>
+                                <span class="contact-value">sammysameerkhan007@gmail.com</span>
+                            </div>
+                        </a>
+                        <a href="tel:+917382898751" class="contact-item glass-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">Phone</span>
+                                <span class="contact-value">+91 7382898751</span>
+                            </div>
+                        </a>
+                        <div class="contact-item glass-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <span class="contact-label">Location</span>
+                                <span class="contact-value">Hyderabad, India</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-social">
+                        <a href="https://linkedin.com/in/sameer-ali-khan-414207219" target="_blank" class="social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://github.com/SameerAliKhan-git" target="_blank" class="social-link" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.instagram.com/sam.mykhan007/" target="_blank" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/917382898751" target="_blank" class="social-link" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form glass-card" id="contactForm" data-aos="fade-left">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required>
+                        <label for="name">Your Name</label>
+                        <span class="form-line"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">Your Email</label>
+                        <span class="form-line"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject">
+                        <label for="subject">Subject</label>
+                        <span class="form-line"></span>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                        <label for="message">Your Message</label>
+                        <span class="form-line"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit">
+                        <span class="btn-text">Send Message</span>
+                        <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                        <span class="btn-glow"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">SAMMY</span>
+                    <p class="footer-tagline">Building digital experiences with passion</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#leadership">Leadership</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-social">
+                    <a href="https://linkedin.com/in/sameer-ali-khan-414207219" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/SameerAliKhan-git" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.instagram.com/sam.mykhan007/" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Sameer Ali Khan. All rights reserved.</p>
+                <p class="footer-made">Designed with <i class="fas fa-heart" style="color: #E50914;"></i> and Built with Lots of 💻 by Sammy</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top glass-card" id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="analytics.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
