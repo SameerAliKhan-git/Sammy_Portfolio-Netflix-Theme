@@ -22,6 +22,9 @@ A stunning, Netflix-inspired portfolio website built with modern web technologie
 - 🎭 **Custom Cursor** - Enhanced desktop experience
 - 📈 **Analytics Ready** - Visitor tracking built-in
 - 🌓 **Theme Toggle** - Dark/Light mode support
+- 📧 **Email Automation** - Instant confirmations via SMTP
+- 💾 **Database Tracking** - SQLite storage for all submissions
+- 📊 **Prisma Studio** - Built-in data management dashboard
 
 ## 🚀 Quick Start
 
@@ -183,7 +186,27 @@ npm run lint       # Lint code (not configured)
 ```env
 PORT=3000                    # Server port
 NODE_ENV=production          # Environment mode
+SMTP_USER=your-email@gmail.com # Gmail Address
+SMTP_PASS=your-app-password    # Gmail App Password
 ```
+
+## 🗄️ Database & Prisma
+
+This project uses **SQLite** to store contact submissions and analytics.
+
+### View Data
+
+You can visualize and manage your data using **Prisma Studio**:
+
+```bash
+npx prisma studio
+```
+
+This opens a web interface at `http://localhost:5555`.
+
+### Schema
+
+The database schema is defined in `prisma/schema.prisma`.
 
 ## 📝 License
 

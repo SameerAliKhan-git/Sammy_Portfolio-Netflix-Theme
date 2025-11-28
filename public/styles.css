@@ -116,7 +116,7 @@ a, button, input, textarea, select {
     pointer-events: none;
     z-index: 99999;
     transform: translate(-50%, -50%);
-    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+    transition: transform 0.05s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease; /* Faster transform */
     mix-blend-mode: difference;
 }
 
@@ -129,7 +129,7 @@ a, button, input, textarea, select {
     pointer-events: none;
     z-index: 99998;
     transform: translate(-50%, -50%);
-    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, border-color 0.2s ease; /* Faster transform */
 }
 
 .cursor.active {
@@ -247,12 +247,17 @@ a, button, input, textarea, select {
 }
 
 .sak-logo {
+    position: relative;
+    width: 150px;
+    height: 150px;
     display: flex;
-    gap: 15px;
+    align-items: center;
+    justify-content: center;
     perspective: 1000px;
 }
 
 .sak-logo .letter {
+    position: absolute; /* Stack letters on top of each other */
     font-family: var(--font-display);
     font-size: clamp(80px, 15vw, 150px);
     color: var(--primary);
@@ -261,96 +266,126 @@ a, button, input, textarea, select {
         0 0 40px rgba(229, 9, 20, 0.3),
         0 0 60px rgba(229, 9, 20, 0.2);
     opacity: 0;
-    transform: translateY(100px) rotateX(-90deg);
+    transform: scale(1.5);
+    line-height: 1;
 }
 
+/* Sequential Appearance & Disappearance */
+/* S: Appears at 0.5s, Disappears at 1.5s */
 .sak-logo .letter-s {
-    animation: letterReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.5s;
+    animation: letterShowHide 1s ease-in-out forwards 0.5s;
 }
 
+/* A: Appears at 1.5s, Disappears at 2.5s */
 .sak-logo .letter-a {
-    animation: letterReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 1.3s;
+    animation: letterShowHide 1s ease-in-out forwards 1.5s;
 }
 
+/* K Container & Animation */
+.letter-k-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* K: Appears at 2.5s, Fades out at 4.0s for Spectrum */
 .sak-logo .letter-k {
-    animation: letterReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 2.1s;
+    animation: letterShow 1.5s ease-in-out forwards 2.5s,
+               letterFadeOut 0.5s ease forwards 4.0s;
 }
 
-@keyframes letterReveal {
-    0% {
-        opacity: 0;
-        transform: translateY(100px) rotateX(-90deg);
-        filter: blur(10px);
-    }
-    50% {
-        opacity: 1;
-        filter: blur(0);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) rotateX(0);
-        filter: blur(0);
-    }
+/* Netflix Spectrum Effect */
+.netflix-spectrum {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    animation: spectrumShow 6s ease-in forwards 4.0s; /* Starts when K fades out */
+    transform-origin: center;
 }
 
+.spec-line {
+    width: 20%;
+    height: 100%;
+    transform: scaleY(0);
+}
+
+/* Colors based on Netflix intro spectrum */
+.s1 { background: #b00612; animation: spectrumGrow 4s ease-out forwards 4.0s; }
+.s2 { background: #e50914; animation: spectrumGrow 4s ease-out forwards 4.1s; }
+.s3 { background: #ff4f5e; animation: spectrumGrow 4s ease-out forwards 4.2s; }
+.s4 { background: #e50914; animation: spectrumGrow 4s ease-out forwards 4.1s; }
+.s5 { background: #b00612; animation: spectrumGrow 4s ease-out forwards 4.0s; }
+
+@keyframes letterShowHide {
+    0% { opacity: 0; transform: scale(0.5); }
+    20% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes letterShow {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes letterFadeOut {
+    to { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes spectrumShow {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(30); } /* Massive zoom into camera */
+}
+
+@keyframes spectrumGrow {
+    0% { transform: scaleY(0); }
+    100% { transform: scaleY(1); }
+}
+
+/* Classic Premium Progress Bar */
 .loader-bar {
-    width: 300px;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    width: 500px; /* Significantly wider */
+    height: 40px; /* Taller for classic look */
+    background: #000; /* Deep black background */
+    border-radius: 2px; /* Sharp, classic corners */
     overflow: hidden;
-    margin-top: 60px;
+    margin-top: 100px;
     position: relative;
+    border: 2px solid #333;
+    box-shadow: 
+        0 0 0 4px rgba(20, 20, 20, 1), /* Dark outer ring */
+        0 0 30px rgba(229, 9, 20, 0.15); /* Ambient glow */
 }
 
 .loader-progress {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--primary));
-    background-size: 200% 100%;
-    border-radius: 10px;
-    animation: shimmer 1.5s infinite linear;
+    background: var(--gradient-primary); /* Matches website styling */
     position: relative;
-}
-
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    box-shadow: 0 0 20px rgba(229, 9, 20, 0.6); /* Enhanced glow */
+    transition: width 0.1s linear;
 }
 
 .loader-percent {
     position: absolute;
-    top: -30px;
-    right: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-family: var(--font-display);
-    font-size: 18px;
-    color: var(--text-secondary);
-    letter-spacing: 2px;
-}
-
-/* ============================================
-   SOCIAL SIDEBARS
-   ============================================ */
-.social-sidebar {
-    position: fixed;
-    left: 40px;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    z-index: 100;
-}
-
-.email-sidebar {
-    position: fixed;
-    right: 40px;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    z-index: 100;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: #fff;
+    z-index: 10;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+    font-weight: 400;
 }
 
 .sidebar-social-link {
@@ -416,6 +451,30 @@ a, button, input, textarea, select {
     width: 1px;
     height: 100px;
     background: linear-gradient(to bottom, var(--text-muted), transparent);
+}
+
+.social-sidebar {
+    position: fixed;
+    left: 40px;
+    bottom: 0;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+}
+
+.email-sidebar {
+    position: fixed;
+    right: 40px;
+    bottom: 0;
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
 }
 
 /* ============================================
@@ -587,10 +646,13 @@ a, button, input, textarea, select {
 .hero {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     position: relative;
     overflow: hidden;
-    padding-top: 80px;
+    padding-top: 100px; /* Increased to push content down below navbar */
+    margin-top: 0;
 }
 
 .hero-bg {
@@ -600,6 +662,7 @@ a, button, input, textarea, select {
     width: 100%;
     height: 100%;
     z-index: 0;
+    background-color: #000; /* Deep cinematic black base */
 }
 
 .hero-gradient {
@@ -609,16 +672,20 @@ a, button, input, textarea, select {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(229, 9, 20, 0.18) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 30% at 50% 90%, rgba(0, 153, 255, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse 40% 40% at 90% 20%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
-    animation: gradientShift 15s ease-in-out infinite;
+        /* Main Spotlight - Netflix Red */
+        radial-gradient(circle at 50% 0%, rgba(229, 9, 20, 0.35) 0%, transparent 60%),
+        /* Secondary Ambient Glow - Purple/Blue for depth */
+        radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 15% 30%, rgba(0, 153, 255, 0.1) 0%, transparent 40%),
+        /* Vignette to blend into content */
+        linear-gradient(to bottom, transparent 20%, #141414 100%);
+    animation: ambientPulse 10s ease-in-out infinite alternate;
+    z-index: 1;
 }
 
-@keyframes gradientShift {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+@keyframes ambientPulse {
+    0% { opacity: 0.8; }
+    100% { opacity: 1; }
 }
 
 .hero-grid {
@@ -626,11 +693,13 @@ a, button, input, textarea, select {
     width: 100%;
     height: 100%;
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 50px 50px;
-    mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 0%, transparent 80%);
+    opacity: 0.4;
+    z-index: 2;
 }
 
 .hero-glow {
@@ -638,24 +707,18 @@ a, button, input, textarea, select {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 1000px;
-    height: 1000px;
-    background: 
-        radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 30% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
-    animation: glowPulse 6s ease-in-out infinite;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle at center, rgba(229, 9, 20, 0.08) 0%, transparent 50%);
+    filter: blur(80px);
+    animation: glowMove 15s ease-in-out infinite;
+    z-index: 2;
+    pointer-events: none;
 }
 
-.hero-glow::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 600px;
-    height: 600px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(229, 9, 20, 0.15) 0%, transparent 50%);
-    animation: glowPulseInner 4s ease-in-out infinite reverse;
+@keyframes glowMove {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.8; }
 }
 
 @keyframes glowPulse {
@@ -2481,6 +2544,86 @@ a, button, input, textarea, select {
 }
 
 /* ============================================
+   GITHUB CALENDAR
+   ============================================ */
+.github-activity {
+    padding-bottom: 50px;
+}
+
+.calendar-container {
+    padding: 30px;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    overflow-x: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.calendar {
+    width: 100%;
+    min-height: 150px;
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+}
+
+.calendar-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 150px;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.calendar-loading i {
+    color: var(--primary);
+    font-size: 24px;
+}
+
+/* Override GitHub Calendar Styles for Dark Theme */
+.js-calendar-graph-svg text.Month, 
+.js-calendar-graph-svg text.wday {
+    fill: var(--text-secondary) !important;
+    font-size: 10px;
+}
+
+.contrib-legend .legend li {
+    color: var(--text-secondary) !important;
+}
+
+.calendar .width-full > .float-left {
+    display: none;
+}
+
+.calendar text {
+    fill: var(--text-secondary);
+}
+
+/* Contribution Colors - Netflix Theme */
+:root {
+    --color-calendar-graph-day-bg: rgba(255, 255, 255, 0.05);
+    --color-calendar-graph-day-L1-bg: rgba(229, 9, 20, 0.2);
+    --color-calendar-graph-day-L2-bg: rgba(229, 9, 20, 0.4);
+    --color-calendar-graph-day-L3-bg: rgba(229, 9, 20, 0.7);
+    --color-calendar-graph-day-L4-bg: #E50914;
+}
+
+rect.ContributionCalendar-day[data-level='0'] { fill: var(--color-calendar-graph-day-bg); }
+rect.ContributionCalendar-day[data-level='1'] { fill: var(--color-calendar-graph-day-L1-bg); }
+rect.ContributionCalendar-day[data-level='2'] { fill: var(--color-calendar-graph-day-L2-bg); }
+rect.ContributionCalendar-day[data-level='3'] { fill: var(--color-calendar-graph-day-L3-bg); }
+rect.ContributionCalendar-day[data-level='4'] { fill: var(--color-calendar-graph-day-L4-bg); }
+
+.calendar .contrib-column {
+    border: none !important;
+}
+
+.calendar .contrib-column-first {
+    border: none !important;
+}
+
+/* ============================================
    BACK TO TOP
    ============================================ */
 .back-to-top {
@@ -3252,9 +3395,96 @@ a, button, input, textarea, select {
     animation: floatAnimation 6s ease-in-out infinite;
 }
 
-@keyframes floatAnimation {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+/* Netflix Confirmation Modal */
+.netflix-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.netflix-modal {
+    background: #181818;
+    padding: 40px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    animation: scaleIn 0.3s ease forwards;
+    border: 1px solid #333;
+}
+
+.netflix-modal .modal-icon {
+    font-size: 50px;
+    color: #46d369; /* Netflix Green */
+    margin-bottom: 20px;
+}
+
+.netflix-modal h3 {
+    color: white;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.netflix-modal p {
+    color: #b3b3b3;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+/* Contact Form Success State */
+.form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    min-height: 400px; /* Match form height */
+    padding: 40px;
+    animation: fadeIn 0.5s ease;
+}
+
+.contact-form.success-state .form-content {
+    display: none;
+}
+
+.contact-form.success-state .form-success {
+    display: flex;
+}
+
+.contact-form.success-state {
+    background: rgba(70, 211, 105, 0.15); /* Netflix Green tint */
+    border-color: #46d369;
+    box-shadow: 0 0 30px rgba(70, 211, 105, 0.2);
+    transition: all 0.5s ease;
+}
+
+.form-success .success-icon {
+    font-size: 60px;
+    color: #46d369;
+    margin-bottom: 20px;
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.form-success h3 {
+    font-size: 28px;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.form-success p {
+    color: #ccc;
+    font-size: 16px;
 }
 
 /* Glow Pulse */
@@ -3429,3 +3659,13 @@ img.loaded {
         color: black;
     }
 }
+
+/* GitHub Activity Styles */
+.github-card { background: var(--bg-card); padding: 2rem; border-radius: 8px; text-align: center; margin-top: 2rem; }
+.github-chart-container { overflow-x: auto; margin-bottom: 2rem; }
+.github-chart { max-width: 100%; height: auto; border-radius: 4px; }
+.github-stats { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.github-stat-card { background: rgba(255,255,255,0.05); padding: 1rem 2rem; border-radius: 8px; min-width: 120px; }
+.stat-value { display: block; font-size: 1.8rem; font-weight: bold; color: #46d369; margin-bottom: 0.5rem; }
+.stat-label { color: #b3b3b3; font-size: 0.9rem; }
+.github-note { color: #666; font-size: 0.8rem; margin-top: 1rem; }

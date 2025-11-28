@@ -84,7 +84,7 @@ class Loader {
         this.loader = document.querySelector('.loader');
         this.progress = document.querySelector('.loader-progress');
         this.percent = document.querySelector('.loader-percent');
-        this.duration = 3500; // 3.5 seconds for loader
+        this.duration = 10000; // 10.0 seconds for extended loader sequence
         
         if (this.loader) {
             this.init();
@@ -549,7 +549,7 @@ class BackToTop {
 // ============================================
 class ContactForm {
     constructor() {
-        this.form = document.getElementById('contact-form');
+        this.form = document.getElementById('contactForm');
         
         if (this.form) {
             this.init();
@@ -589,8 +589,14 @@ class ContactForm {
             const result = await response.json();
             
             if (response.ok) {
-                this.showNotification('Message sent successfully!', 'success');
+                // Show in-place success message
+                this.form.classList.add('success-state');
                 this.form.reset();
+                
+                // Restore form after 7 seconds
+                setTimeout(() => {
+                    this.form.classList.remove('success-state');
+                }, 7000);
             } else {
                 this.showNotification(result.message || 'Failed to send message', 'error');
             }
@@ -603,40 +609,61 @@ class ContactForm {
     }
     
     showNotification(message, type) {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <span>${message}</span>
-        `;
-        
-        // Add styles
-        notification.style.cssText = `
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            padding: 15px 25px;
-            background: ${type === 'success' ? '#00d4aa' : '#E50914'};
-            color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 500;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        `;
-        
-        document.body.appendChild(notification);
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-            notification.style.animation = 'slideOut 0.3s ease forwards';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
+        if (type === 'success') {
+            const modal = document.createElement('div');
+            modal.className = 'netflix-modal-overlay';
+            modal.innerHTML = `
+                <div class="netflix-modal">
+                    <div class="modal-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Message Sent!</h3>
+                    <p>${message}</p>
+                    <button class="btn btn-netflix-primary" style="width: 100%; justify-content: center;" onclick="this.closest('.netflix-modal-overlay').remove()">OK</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Close on click outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        } else {
+            // Create notification element (Toast for errors)
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 30px;
+                padding: 15px 25px;
+                background: ${type === 'success' ? '#00d4aa' : '#E50914'};
+                color: white;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+                font-weight: 500;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
     }
 }
 
@@ -891,6 +918,130 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ============================================
+// GITHUB ACTIVITY
+// ============================================
+class GitHubActivity {
+    constructor() {
+        this.container = document.querySelector('.calendar');
+        if (this.container) {
+            this.init();
+        }
+    }
+
+    async init() {
+        try {
+            // Fetch data from reliable JSON API
+            const response = await fetch('https://github-contributions-api.jogruber.de/v4/SameerAliKhan-git');
+            if (!response.ok) throw new Error('Failed to fetch GitHub data');
+            
+            const data = await response.json();
+            this.renderCalendar(data);
+        } catch (e) {
+            console.error("GitHub Calendar Error:", e);
+            this.container.innerHTML = `
+                <div style="text-align:center; padding: 20px;">
+                    <p style="color:var(--text-secondary); margin-bottom: 10px;">Unable to load GitHub activity.</p>
+                    <a href="https://github.com/SameerAliKhan-git" target="_blank" class="btn btn-netflix-primary" style="display:inline-flex; padding: 8px 16px; font-size: 14px;">
+                        <i class="fab fa-github" style="margin-right: 8px;"></i> Visit Profile
+                    </a>
+                </div>
+            `;
+        }
+    }
+
+    renderCalendar(data) {
+        // Filter for last 365 days
+        const today = new Date();
+        const oneYearAgo = new Date();
+        oneYearAgo.setDate(today.getDate() - 365);
+        
+        const contributions = data.contributions.filter(item => {
+            const date = new Date(item.date);
+            return date >= oneYearAgo && date <= today;
+        });
+
+        // Group by weeks
+        const weeks = [];
+        let currentWeek = [];
+        
+        // Pad the beginning if the first day is not Sunday
+        const firstDay = new Date(contributions[0].date).getDay(); // 0 = Sunday
+        for (let i = 0; i < firstDay; i++) {
+            currentWeek.push(null);
+        }
+
+        contributions.forEach(item => {
+            currentWeek.push(item);
+            if (currentWeek.length === 7) {
+                weeks.push(currentWeek);
+                currentWeek = [];
+            }
+        });
+        
+        if (currentWeek.length > 0) {
+            weeks.push(currentWeek);
+        }
+
+        // Generate SVG
+        const cellSize = 10;
+        const cellGap = 3;
+        const weekWidth = cellSize + cellGap;
+        const graphWidth = weeks.length * weekWidth;
+        const graphHeight = 7 * (cellSize + cellGap); // 7 days
+
+        let svgHTML = `
+            <svg width="100%" height="100%" viewBox="0 0 ${graphWidth + 40} ${graphHeight + 40}" class="js-calendar-graph-svg">
+                <g transform="translate(20, 20)">
+        `;
+
+        weeks.forEach((week, weekIndex) => {
+            const x = weekIndex * weekWidth;
+            
+            week.forEach((day, dayIndex) => {
+                if (day) {
+                    const y = dayIndex * (cellSize + cellGap);
+                    
+                    svgHTML += `
+                        <rect class="ContributionCalendar-day" 
+                              x="${x}" y="${y}" 
+                              width="${cellSize}" height="${cellSize}" 
+                              rx="2" ry="2" 
+                              data-date="${day.date}" 
+                              data-level="${day.level}"
+                              data-count="${day.count}"
+                        >
+                            <title>${day.count} contributions on ${day.date}</title>
+                        </rect>
+                    `;
+                }
+            });
+        });
+
+        svgHTML += `
+                </g>
+            </svg>
+            <div class="contrib-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px; color:var(--text-secondary);">
+                <a href="https://github.com/SameerAliKhan-git" target="_blank" style="color:var(--text-secondary); text-decoration:none;">
+                    ${data.total[today.getFullYear()] || 0} contributions in ${today.getFullYear()}
+                </a>
+                <div class="contrib-legend" style="display:flex; align-items:center; gap:2px;">
+                    <span>Less</span>
+                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="0"></rect></svg>
+                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="1"></rect></svg>
+                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="2"></rect></svg>
+                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="3"></rect></svg>
+                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="4"></rect></svg>
+                    <span>More</span>
+                </div>
+            </div>
+        `;
+
+        this.container.innerHTML = svgHTML;
+        this.container.classList.add('loaded');
+    }
+}
+
+// ============================================
 // INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -914,6 +1065,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new Parallax();
     new SmoothReveal();
     new SmoothCounter();
+    new GitHubActivity();
     
     // Add reveal classes to elements
     document.querySelectorAll('.glass-card, .skill-category, .project-card, .timeline-content, .leadership-card').forEach((el, i) => {

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -121,12 +122,10 @@ app.use(express.static(path.join(__dirname, 'public'), {
         // Set cache headers based on file type
         if (filePath.endsWith('.html')) {
             res.setHeader('Cache-Control', 'no-cache');
-        } else if (filePath.match(/\.(js|css)$/)) {
+        } else if (isProduction && filePath.match(/\.(js|css|png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|eot)$/)) {
             res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-        } else if (filePath.match(/\.(png|jpg|jpeg|gif|webp|svg|ico)$/)) {
-            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-        } else if (filePath.match(/\.(woff|woff2|ttf|eot)$/)) {
-            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        } else {
+            res.setHeader('Cache-Control', 'no-cache');
         }
     }
 }));
@@ -263,25 +262,30 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         const { name, email, message, subject } = req.body; // Get subject from body as well
         const sanitizedMessage = validation.sanitized.message;
         
-        // Log the submission
         console.log(`📧 Contact form submission from ${name} (${email}) at ${new Date().toISOString()}`);
         
-        // Store submission in Database
-        const stmt = db.prepare('INSERT INTO contacts (name, email, subject, message, ip, user_agent) VALUES (?, ?, ?, ?, ?, ?)');
-        stmt.run(name, email, subject, sanitizedMessage, req.ip, req.get('User-Agent'), function(err) {
-            if (err) {
-                console.error('Error inserting into database:', err.message);
-            } else {
-                console.log(`✅ Contact saved to DB with ID: ${this.lastID}`);
-            }
+        // 1. Insert into Database (Promisified)
+        const contactId = await new Promise((resolve, reject) => {
+            const stmt = db.prepare('INSERT INTO contacts (name, email, subject, message, ip, user_agent, email_status) VALUES (?, ?, ?, ?, ?, ?, ?)');
+            stmt.run(name, email, subject, sanitizedMessage, req.ip, req.get('User-Agent'), 'pending', function(err) {
+                if (err) reject(err);
+                else resolve(this.lastID);
+            });
+            stmt.finalize();
         });
-        stmt.finalize();
+        
+        console.log(`✅ Contact saved to DB with ID: ${contactId}`);
 
-        // Send Emails if credentials are provided
+        // 2. Send Emails
+        let emailStatus = 'skipped';
+        let emailSentAt = null;
+
         if (process.env.SMTP_USER && process.env.SMTP_PASS) {
             console.log('Attempting to send email...');
             const transporter = nodemailer.createTransport({
-                service: 'gmail',
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false, // upgrade later with STARTTLS
                 auth: {
                     user: process.env.SMTP_USER,
                     pass: process.env.SMTP_PASS
@@ -289,6 +293,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
             });
 
             // Verify connection configuration
+            /*
             transporter.verify(function(error, success) {
                 if (error) {
                     console.error('Email Server Error:', error);
@@ -296,6 +301,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
                     console.log('Email Server is ready to take our messages');
                 }
             });
+            */
 
             // Email to Admin (Sammy)
             const mailToAdmin = {
@@ -336,12 +342,22 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
                     transporter.sendMail(mailToUser)
                 ]);
                 console.log('📧 Emails sent successfully');
+                emailStatus = 'sent';
+                emailSentAt = new Date().toISOString();
             } catch (emailErr) {
                 console.error('Failed to send emails:', emailErr);
+                emailStatus = 'failed';
             }
         } else {
             console.log('⚠️ SMTP credentials not found. Emails not sent.');
+            emailStatus = 'skipped_no_creds';
         }
+        
+        // 3. Update Database with Email Status
+        db.run('UPDATE contacts SET email_status = ?, email_sent_at = ? WHERE id = ?', [emailStatus, emailSentAt, contactId], (err) => {
+            if (err) console.error('Error updating email status:', err);
+            else console.log(`Updated contact ${contactId} with status: ${emailStatus}`);
+        });
         
         res.json({ 
             success: true, 
@@ -366,6 +382,42 @@ app.get('/api/health', (req, res) => {
     });
 });
 
+// ============================================
+// IN-MEMORY CACHE (Performance Optimization)
+// ============================================
+const cache = {
+    guestbook: [],
+    stats: { total: 0, daily: {} },
+    newsletter: []
+};
+
+// Load data into memory on start
+const loadCache = () => {
+    try {
+        if (fs.existsSync(path.join(logsDir, 'guestbook.json'))) {
+            cache.guestbook = JSON.parse(fs.readFileSync(path.join(logsDir, 'guestbook.json'), 'utf8'));
+        }
+        if (fs.existsSync(path.join(logsDir, 'visitor-stats.json'))) {
+            cache.stats = JSON.parse(fs.readFileSync(path.join(logsDir, 'visitor-stats.json'), 'utf8'));
+        }
+        if (fs.existsSync(path.join(logsDir, 'newsletter-subscriptions.json'))) {
+            cache.newsletter = JSON.parse(fs.readFileSync(path.join(logsDir, 'newsletter-subscriptions.json'), 'utf8'));
+        }
+        console.log('🚀 Data loaded into in-memory cache');
+    } catch (err) {
+        console.error('Error loading cache:', err);
+    }
+};
+
+loadCache();
+
+// Helper to persist data asynchronously
+const persistData = (file, data) => {
+    fs.writeFile(path.join(logsDir, file), JSON.stringify(data, null, 2), (err) => {
+        if (err) console.error(`Error saving ${file}:`, err);
+    });
+};
+
 // Newsletter subscription endpoint
 app.post('/api/newsletter', apiLimiter, (req, res) => {
     try {
@@ -378,30 +430,19 @@ app.post('/api/newsletter', apiLimiter, (req, res) => {
             });
         }
         
-        // Store subscription
-        const subscriptionsPath = path.join(logsDir, 'newsletter-subscriptions.json');
-        let subscriptions = [];
-        
-        if (fs.existsSync(subscriptionsPath)) {
-            try {
-                subscriptions = JSON.parse(fs.readFileSync(subscriptionsPath, 'utf8'));
-            } catch (e) {
-                subscriptions = [];
-            }
-        }
-        
-        // Check for duplicate
-        if (subscriptions.some(s => s.email === email)) {
+        // Check for duplicate in memory
+        if (cache.newsletter.some(s => s.email === email)) {
             return res.json({ success: true, message: 'You\'re already subscribed!' });
         }
         
-        subscriptions.push({
+        cache.newsletter.push({
             email,
             timestamp: new Date().toISOString(),
             ip: req.ip
         });
         
-        fs.writeFileSync(subscriptionsPath, JSON.stringify(subscriptions, null, 2));
+        // Persist async
+        persistData('newsletter-subscriptions.json', cache.newsletter);
         
         console.log(`📬 New newsletter subscription: ${email}`);
         res.json({ success: true, message: 'Thank you for subscribing!' });
@@ -414,18 +455,8 @@ app.post('/api/newsletter', apiLimiter, (req, res) => {
 
 // Guestbook endpoints
 app.get('/api/guestbook', (req, res) => {
-    const guestbookPath = path.join(logsDir, 'guestbook.json');
-    let entries = [];
-    
-    if (fs.existsSync(guestbookPath)) {
-        try {
-            entries = JSON.parse(fs.readFileSync(guestbookPath, 'utf8'));
-        } catch (e) {
-            entries = [];
-        }
-    }
-    
-    res.json({ success: true, entries: entries.slice(0, 50) });
+    // Serve from memory - Instant!
+    res.json({ success: true, entries: cache.guestbook.slice(0, 50) });
 });
 
 app.post('/api/guestbook', apiLimiter, (req, res) => {
@@ -440,17 +471,6 @@ app.post('/api/guestbook', apiLimiter, (req, res) => {
             return res.status(400).json({ success: false, error: 'Please provide a valid message (3-500 characters).' });
         }
         
-        const guestbookPath = path.join(logsDir, 'guestbook.json');
-        let entries = [];
-        
-        if (fs.existsSync(guestbookPath)) {
-            try {
-                entries = JSON.parse(fs.readFileSync(guestbookPath, 'utf8'));
-            } catch (e) {
-                entries = [];
-            }
-        }
-        
         const entry = {
             name: name.trim().substring(0, 50),
             message: message.trim().substring(0, 500),
@@ -458,10 +478,11 @@ app.post('/api/guestbook', apiLimiter, (req, res) => {
             timestamp: new Date().toISOString()
         };
         
-        entries.unshift(entry);
-        entries = entries.slice(0, 100); // Keep only last 100 entries
+        cache.guestbook.unshift(entry);
+        cache.guestbook = cache.guestbook.slice(0, 100); // Keep only last 100 entries
         
-        fs.writeFileSync(guestbookPath, JSON.stringify(entries, null, 2));
+        // Persist async
+        persistData('guestbook.json', cache.guestbook);
         
         console.log(`📝 New guestbook entry from ${name}`);
         res.json({ success: true, entry });
@@ -474,39 +495,21 @@ app.post('/api/guestbook', apiLimiter, (req, res) => {
 
 // Visitor counter endpoint
 app.post('/api/visit', (req, res) => {
-    const statsPath = path.join(logsDir, 'visitor-stats.json');
-    let stats = { total: 0, daily: {} };
-    
-    if (fs.existsSync(statsPath)) {
-        try {
-            stats = JSON.parse(fs.readFileSync(statsPath, 'utf8'));
-        } catch (e) {
-            stats = { total: 0, daily: {} };
-        }
-    }
-    
     const today = new Date().toISOString().split('T')[0];
-    stats.total++;
-    stats.daily[today] = (stats.daily[today] || 0) + 1;
     
-    fs.writeFileSync(statsPath, JSON.stringify(stats, null, 2));
+    // Update memory
+    cache.stats.total++;
+    cache.stats.daily[today] = (cache.stats.daily[today] || 0) + 1;
     
-    res.json({ success: true, total: stats.total });
+    // Persist async
+    persistData('visitor-stats.json', cache.stats);
+    
+    res.json({ success: true, total: cache.stats.total });
 });
 
 app.get('/api/stats', (req, res) => {
-    const statsPath = path.join(logsDir, 'visitor-stats.json');
-    let stats = { total: 0 };
-    
-    if (fs.existsSync(statsPath)) {
-        try {
-            stats = JSON.parse(fs.readFileSync(statsPath, 'utf8'));
-        } catch (e) {
-            stats = { total: 0 };
-        }
-    }
-    
-    res.json({ success: true, visitors: stats.total });
+    // Serve from memory - Instant!
+    res.json({ success: true, visitors: cache.stats.total });
 });
 
 // ============================================
