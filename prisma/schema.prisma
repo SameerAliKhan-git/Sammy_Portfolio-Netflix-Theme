@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../portfolio.db"
+}
+
+model analytics {
+  id         Int       @id @default(autoincrement())
+  event_type String
+  details    String?
+  ip         String?
+  user_agent String?
+  created_at DateTime? @default(now())
+}
+
+model contacts {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String
+  subject       String?
+  message       String
+  ip            String?
+  user_agent    String?
+  created_at    DateTime? @default(now())
+  email_status  String?   @default("pending")
+  email_sent_at DateTime?
+}
