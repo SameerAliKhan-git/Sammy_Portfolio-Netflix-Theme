@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Render
-        if: env.RENDER_DEPLOY_HOOK_URL != ''
+        if: secrets.RENDER_DEPLOY_HOOK_URL != ''
         env:
           RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
@@ -79,9 +79,7 @@ jobs:
           curl -X POST $RENDER_DEPLOY_HOOK_URL
 
       - name: Deployment Skipped
-        if: env.RENDER_DEPLOY_HOOK_URL == ''
-        env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        if: secrets.RENDER_DEPLOY_HOOK_URL == ''
         run: |
           echo "⚠️ Deployment skipped because RENDER_DEPLOY_HOOK_URL secret is missing."
           echo "Please configure this secret in GitHub Settings > Secrets and Variables > Actions."
