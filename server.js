@@ -54,10 +54,10 @@ app.use(helmet({
         directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
             scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
             imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'", "https://api.github.com"],
+            connectSrc: ["'self'", "https://api.github.com", "https://github-contributions-api.jogruber.de"],
             frameSrc: ["'self'", "https:"],
             objectSrc: ["'none'"],
             workerSrc: ["'self'"],
@@ -388,7 +388,8 @@ app.get('/api/health', (req, res) => {
 const cache = {
     guestbook: [],
     stats: { total: 0, daily: {} },
-    newsletter: []
+    newsletter: [],
+    github: { data: null, lastUpdated: 0 }
 };
 
 // Load data into memory on start
@@ -510,6 +511,57 @@ app.post('/api/visit', (req, res) => {
 app.get('/api/stats', (req, res) => {
     // Serve from memory - Instant!
     res.json({ success: true, visitors: cache.stats.total });
+});
+
+// GitHub Stats Endpoint
+app.get('/api/github-stats', async (req, res) => {
+    try {
+        const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+        const now = Date.now();
+
+        if (cache.github.data && (now - cache.github.lastUpdated < CACHE_DURATION)) {
+            return res.json(cache.github.data);
+        }
+
+        const username = 'SameerAliKhan-git';
+        const headers = { 'User-Agent': 'SameerAliKhan-Portfolio' };
+
+        // Fetch user info
+        const userResp = await fetch(`https://api.github.com/users/${username}`, { headers });
+        if (!userResp.ok) throw new Error('GitHub User API error');
+        const userData = await userResp.json();
+
+        // Fetch events for contributions
+        const eventsResp = await fetch(`https://api.github.com/users/${username}/events`, { headers });
+        if (!eventsResp.ok) throw new Error('GitHub Events API error');
+        const eventsData = await eventsResp.json();
+
+        // Calculate contributions
+        const pushEvents = eventsData.filter(e => e.type === 'PushEvent');
+        let contributions = 0;
+        pushEvents.forEach(e => {
+            contributions += e.payload.commits ? e.payload.commits.length : 1;
+        });
+
+        const stats = {
+            repos: userData.public_repos,
+            followers: userData.followers,
+            contributions: contributions
+        };
+
+        // Update cache
+        cache.github.data = stats;
+        cache.github.lastUpdated = now;
+
+        res.json(stats);
+    } catch (error) {
+        console.error('GitHub API Error:', error);
+        // Serve stale data if available
+        if (cache.github.data) {
+            return res.json(cache.github.data);
+        }
+        res.status(500).json({ error: 'Failed to fetch GitHub stats' });
+    }
 });
 
 // ============================================

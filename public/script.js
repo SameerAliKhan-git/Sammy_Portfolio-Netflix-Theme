@@ -2,6 +2,7 @@
    SAMEER ALI KHAN - PREMIUM PORTFOLIO
    Interactive JavaScript
    ============================================ */
+console.log('script.js v2.1.1 loaded');
 
 // ============================================
 // CUSTOM CURSOR
@@ -84,7 +85,7 @@ class Loader {
         this.loader = document.querySelector('.loader');
         this.progress = document.querySelector('.loader-progress');
         this.percent = document.querySelector('.loader-percent');
-        this.duration = 10000; // 10.0 seconds for extended loader sequence
+        this.duration = 2500; // 2.5 seconds for loader sequence
         
         if (this.loader) {
             this.init();
@@ -93,10 +94,15 @@ class Loader {
     
     init() {
         // Force show loader
-        this.loader.style.opacity = '1';
-        this.loader.style.visibility = 'visible';
-        this.loader.classList.remove('hidden');
+        // this.loader.classList.add('active');
+        // this.loader.classList.remove('hidden');
         
+        // Safety timeout to ensure loader hides
+        setTimeout(() => {
+            console.log('Loader safety timeout triggered');
+            this.hide();
+        }, this.duration + 1000);
+
         let startTime = null;
         
         const animate = (timestamp) => {
@@ -123,6 +129,7 @@ class Loader {
     }
     
     hide() {
+        this.loader.classList.remove('active');
         this.loader.classList.add('hidden');
         document.body.style.overflow = 'auto';
         
@@ -472,8 +479,8 @@ class ScrollAnimations {
     init() {
         // Add initial styles
         this.elements.forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = this.getInitialTransform(element);
+            // element.style.opacity = '0'; // Disabled to ensure visibility
+            // element.style.transform = this.getInitialTransform(element);
             element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
         });
         
@@ -918,139 +925,12 @@ style.textContent = `
 document.head.appendChild(style);
 
 // ============================================
-// GITHUB ACTIVITY
-// ============================================
-class GitHubActivity {
-    constructor() {
-        this.container = document.querySelector('.calendar');
-        if (this.container) {
-            this.init();
-        }
-    }
-
-    async init() {
-        try {
-            // Fetch data from reliable JSON API
-            const response = await fetch('https://github-contributions-api.jogruber.de/v4/SameerAliKhan-git');
-            if (!response.ok) throw new Error('Failed to fetch GitHub data');
-            
-            const data = await response.json();
-            this.renderCalendar(data);
-        } catch (e) {
-            console.error("GitHub Calendar Error:", e);
-            this.container.innerHTML = `
-                <div style="text-align:center; padding: 20px;">
-                    <p style="color:var(--text-secondary); margin-bottom: 10px;">Unable to load GitHub activity.</p>
-                    <a href="https://github.com/SameerAliKhan-git" target="_blank" class="btn btn-netflix-primary" style="display:inline-flex; padding: 8px 16px; font-size: 14px;">
-                        <i class="fab fa-github" style="margin-right: 8px;"></i> Visit Profile
-                    </a>
-                </div>
-            `;
-        }
-    }
-
-    renderCalendar(data) {
-        // Filter for last 365 days
-        const today = new Date();
-        const oneYearAgo = new Date();
-        oneYearAgo.setDate(today.getDate() - 365);
-        
-        const contributions = data.contributions.filter(item => {
-            const date = new Date(item.date);
-            return date >= oneYearAgo && date <= today;
-        });
-
-        // Group by weeks
-        const weeks = [];
-        let currentWeek = [];
-        
-        // Pad the beginning if the first day is not Sunday
-        const firstDay = new Date(contributions[0].date).getDay(); // 0 = Sunday
-        for (let i = 0; i < firstDay; i++) {
-            currentWeek.push(null);
-        }
-
-        contributions.forEach(item => {
-            currentWeek.push(item);
-            if (currentWeek.length === 7) {
-                weeks.push(currentWeek);
-                currentWeek = [];
-            }
-        });
-        
-        if (currentWeek.length > 0) {
-            weeks.push(currentWeek);
-        }
-
-        // Generate SVG
-        const cellSize = 10;
-        const cellGap = 3;
-        const weekWidth = cellSize + cellGap;
-        const graphWidth = weeks.length * weekWidth;
-        const graphHeight = 7 * (cellSize + cellGap); // 7 days
-
-        let svgHTML = `
-            <svg width="100%" height="100%" viewBox="0 0 ${graphWidth + 40} ${graphHeight + 40}" class="js-calendar-graph-svg">
-                <g transform="translate(20, 20)">
-        `;
-
-        weeks.forEach((week, weekIndex) => {
-            const x = weekIndex * weekWidth;
-            
-            week.forEach((day, dayIndex) => {
-                if (day) {
-                    const y = dayIndex * (cellSize + cellGap);
-                    
-                    svgHTML += `
-                        <rect class="ContributionCalendar-day" 
-                              x="${x}" y="${y}" 
-                              width="${cellSize}" height="${cellSize}" 
-                              rx="2" ry="2" 
-                              data-date="${day.date}" 
-                              data-level="${day.level}"
-                              data-count="${day.count}"
-                        >
-                            <title>${day.count} contributions on ${day.date}</title>
-                        </rect>
-                    `;
-                }
-            });
-        });
-
-        svgHTML += `
-                </g>
-            </svg>
-            <div class="contrib-footer" style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:12px; color:var(--text-secondary);">
-                <a href="https://github.com/SameerAliKhan-git" target="_blank" style="color:var(--text-secondary); text-decoration:none;">
-                    ${data.total[today.getFullYear()] || 0} contributions in ${today.getFullYear()}
-                </a>
-                <div class="contrib-legend" style="display:flex; align-items:center; gap:2px;">
-                    <span>Less</span>
-                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="0"></rect></svg>
-                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="1"></rect></svg>
-                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="2"></rect></svg>
-                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="3"></rect></svg>
-                    <svg width="10" height="10"><rect width="10" height="10" rx="2" class="ContributionCalendar-day" data-level="4"></rect></svg>
-                    <span>More</span>
-                </div>
-            </div>
-        `;
-
-        this.container.innerHTML = svgHTML;
-        this.container.classList.add('loaded');
-    }
-}
-
-// ============================================
 // INITIALIZE
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Prevent scroll during loader
-    document.body.style.overflow = 'hidden';
-    
     // Initialize all components
-    new Loader();
-    new CustomCursor();
+    new Loader();       
+    new CustomCursor(); 
     new Navigation();
     new SmoothScroll();
     new TypingEffect();
@@ -1062,19 +942,27 @@ document.addEventListener('DOMContentLoaded', () => {
     new BackToTop();
     new ContactForm();
     new MagneticButtons();
-    new Parallax();
+    new Parallax();     
     new SmoothReveal();
-    new SmoothCounter();
-    new GitHubActivity();
+    // new SmoothCounter(); // Removed to prevent conflict with StatsCounter
     
-    // Add reveal classes to elements
-    document.querySelectorAll('.glass-card, .skill-category, .project-card, .timeline-content, .leadership-card').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.classList.add(`stagger-${(i % 6) + 1}`);
-    });
+    const glitchEl = document.querySelector('.glitch');
+    if (glitchEl) new TextScramble(glitchEl);
     
     // Initialize reveal after adding classes
     setTimeout(() => new SmoothReveal(), 100);
+
+    // Failsafe: Ensure loader is removed even if animation hangs
+    setTimeout(() => {
+        const loader = document.querySelector('.loader');
+        if (loader && !loader.classList.contains('hidden')) {
+            console.log('Failsafe: forcing loader hide');
+            loader.classList.remove('active');
+            loader.classList.add('hidden');
+            setTimeout(() => loader.style.display = 'none', 500);
+            document.body.style.overflow = 'auto';
+        }
+    }, 3500);
 });
 
 // ============================================
@@ -1086,6 +974,8 @@ if ('fonts' in document) {
         document.fonts.load('400 1em Bebas Neue')
     ]).then(() => {
         document.documentElement.classList.add('fonts-loaded');
+    }).catch(e => {
+        console.warn('Font loading failed:', e);
     });
 }
 
