@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="this.classList.toggle('active'); document.getElementById('navMenu').classList.toggle('active'); document.body.style.overflow = document.getElementById('navMenu').classList.contains('active') ? 'hidden' : '';">
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="document.getElementById('navMenu').style.transform = document.getElementById('navMenu').style.transform === 'translateX(0%)' ? 'translateX(100%)' : 'translateX(0%)'; document.body.style.overflow = document.body.style.overflow === 'hidden' ? '' : 'hidden'; this.classList.toggle('active');">
                 <span></span>
                 <span></span>
                 <span></span>
