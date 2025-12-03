@@ -275,14 +275,31 @@ class Navigation {
         // Scroll effect
         window.addEventListener('scroll', () => this.handleScroll());
         
-        // Mobile toggle - Direct assignment for reliability
-        if (this.toggle) {
-            this.toggle.onclick = (e) => {
+        // Mobile toggle - Robust Event Listener
+        const toggleBtn = document.getElementById('navToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        if (toggleBtn && navMenu) {
+            // Remove any existing inline handlers to prevent conflicts
+            toggleBtn.removeAttribute('onclick');
+            
+            toggleBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Toggle clicked'); // Debug
-                this.toggleMenu();
-            };
+                
+                const isActive = navMenu.classList.contains('active');
+                
+                if (isActive) {
+                    navMenu.classList.remove('active');
+                    toggleBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                } else {
+                    navMenu.classList.add('active');
+                    toggleBtn.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                console.log('Menu toggled. Active:', !isActive);
+            });
         }
         
         // Close menu on link click

@@ -398,7 +398,9 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
                 emailStatus = 'sent';
                 emailSentAt = new Date().toISOString();
             } catch (emailErr) {
-                console.error('Failed to send emails:', emailErr);
+                console.error('❌ FAILED TO SEND EMAILS:', emailErr);
+                console.error('Check your SMTP_USER and SMTP_PASS in .env file.');
+                console.error('If using Gmail, ensure you are using an App Password, not your login password.');
                 emailStatus = 'failed';
             }
         } else {
