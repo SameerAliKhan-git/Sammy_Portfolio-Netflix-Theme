@@ -631,6 +631,7 @@ if (require.main === module) {
         console.log(`║  📄 Resume:    http://localhost:${PORT}/api/download-resume ║`);
         console.log(`║  🏥 Health:    http://localhost:${PORT}/api/health          ║`);
         console.log(`║  🔒 Mode:      ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'}                       ║`);
+        console.log(`║  📧 SMTP User: ${process.env.SMTP_USER ? process.env.SMTP_USER.substring(0, 3) + '***' : 'NOT SET'}                        ║`);
         console.log('╚════════════════════════════════════════════════════╝');
         console.log('');
     });
