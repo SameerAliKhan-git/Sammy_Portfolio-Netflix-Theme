@@ -242,6 +242,29 @@ app.post('/api/log-activity', (req, res) => {
 // Contact form submission
 app.post('/api/contact', contactLimiter, async (req, res) => {
     try {
+        const { recaptchaToken } = req.body;
+
+        // Verify reCAPTCHA
+        // Only verify if secret key is present (allows local testing without it if needed, but user asked for integration)
+        // Ideally, we should enforce it.
+        if (process.env.RECAPTCHA_SECRET_KEY) {
+            const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
+            
+            try {
+                const verifyRes = await fetch(verifyUrl, { method: 'POST' });
+                const verifyData = await verifyRes.json();
+                
+                if (!verifyData.success || verifyData.score < 0.5) {
+                    console.log(`🚫 reCAPTCHA failed: ${JSON.stringify(verifyData)}`);
+                    return res.status(400).json({ success: false, message: 'Anti-spam verification failed.' });
+                }
+            } catch (err) {
+                console.error('reCAPTCHA verification error:', err);
+                // Fail open or closed? Closed for security.
+                return res.status(500).json({ success: false, message: 'Verification service error.' });
+            }
+        }
+
         const validation = validateContactForm(req.body);
         
         // Check for spam
@@ -389,7 +412,7 @@ const cache = {
     guestbook: [],
     stats: { total: 0, daily: {} },
     newsletter: [],
-    github: { data: null, lastUpdated: 0 }
+    newsletter: []
 };
 
 // Load data into memory on start
@@ -514,61 +537,7 @@ app.get('/api/stats', (req, res) => {
 });
 
 // GitHub Stats Endpoint
-app.get('/api/github-stats', async (req, res) => {
-    try {
-        const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
-        const now = Date.now();
 
-        if (cache.github.data && (now - cache.github.lastUpdated < CACHE_DURATION)) {
-            return res.json(cache.github.data);
-        }
-
-        const username = 'SameerAliKhan-git';
-        const headers = { 'User-Agent': 'SameerAliKhan-Portfolio' };
-
-        // Fetch user info
-        const userResp = await fetch(`https://api.github.com/users/${username}`, { headers });
-        if (!userResp.ok) throw new Error('GitHub User API error');
-        const userData = await userResp.json();
-
-        // Fetch events for contributions
-        const eventsResp = await fetch(`https://api.github.com/users/${username}/events`, { headers });
-        if (!eventsResp.ok) throw new Error('GitHub Events API error');
-        const eventsData = await eventsResp.json();
-
-        // Calculate contributions
-        const pushEvents = eventsData.filter(e => e.type === 'PushEvent');
-        let contributions = 0;
-        pushEvents.forEach(e => {
-            contributions += e.payload.commits ? e.payload.commits.length : 1;
-        });
-
-        const stats = {
-            repos: userData.public_repos,
-            followers: userData.followers,
-            contributions: contributions
-        };
-
-        // Update cache
-        cache.github.data = stats;
-        cache.github.lastUpdated = now;
-
-        res.json(stats);
-    } catch (error) {
-        console.error('GitHub API Error:', error);
-        // Serve stale data if available
-        if (cache.github.data) {
-            return res.json(cache.github.data);
-        }
-        res.status(500).json({ error: 'Failed to fetch GitHub stats' });
-    }
-});
-
-// ============================================
-// MAIN ROUTES
-// ============================================
-
-// Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

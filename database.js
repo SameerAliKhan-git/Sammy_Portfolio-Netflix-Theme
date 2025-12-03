@@ -2,12 +2,16 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 // Connect to database
-const dbPath = path.join(__dirname, 'portfolio.db');
+// On Vercel, the filesystem is read-only, so we use in-memory database
+// Note: Data will not persist across deployments/restarts on Vercel
+const isVercel = process.env.VERCEL === '1';
+const dbPath = isVercel ? ':memory:' : path.join(__dirname, 'portfolio.db');
+
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err.message);
     } else {
-        console.log('Connected to the SQLite database.');
+        console.log(`Connected to the SQLite database (${isVercel ? 'In-Memory/Vercel' : 'Local File'}).`);
         initDb();
     }
 });
@@ -23,7 +27,9 @@ function initDb() {
             message TEXT NOT NULL,
             ip TEXT,
             user_agent TEXT,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            email_status TEXT DEFAULT 'pending',
+            email_sent_at DATETIME
         )`);
 
         // Create Analytics Table

@@ -577,14 +577,18 @@ class ContactForm {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
         
-        const formData = {
-            name: this.form.querySelector('input[name="name"]').value,
-            email: this.form.querySelector('input[name="email"]').value,
-            subject: this.form.querySelector('input[name="subject"]').value,
-            message: this.form.querySelector('textarea[name="message"]').value
-        };
-        
         try {
+            // Execute reCAPTCHA
+            const token = await grecaptcha.execute('6LeraR0sAAAAAEXOwcly2wvYXOX6bSQngwswf0Un', {action: 'submit'});
+            
+            const formData = {
+                name: this.form.querySelector('input[name="name"]').value,
+                email: this.form.querySelector('input[name="email"]').value,
+                subject: this.form.querySelector('input[name="subject"]').value,
+                message: this.form.querySelector('textarea[name="message"]').value,
+                recaptchaToken: token
+            };
+            
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
@@ -608,6 +612,7 @@ class ContactForm {
                 this.showNotification(result.message || 'Failed to send message', 'error');
             }
         } catch (error) {
+            console.error('Contact form error:', error);
             this.showNotification('An error occurred. Please try again.', 'error');
         } finally {
             submitBtn.innerHTML = originalText;
@@ -867,7 +872,7 @@ class SmoothCounter {
     
     animateCounter(el) {
         const target = parseInt(el.getAttribute('data-count'));
-        const duration = 2000;
+        const duration = 4000;
         const start = performance.now();
         
         const updateCounter = (currentTime) => {
@@ -934,7 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new Navigation();
     new SmoothScroll();
     new TypingEffect();
-    new StatsCounter();
+    new SmoothCounter();
     new SkillBars();
     new Timeline();
     new TiltEffect();
@@ -952,6 +957,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize reveal after adding classes
     setTimeout(() => new SmoothReveal(), 100);
 
+    // Initialize new features
+    new Newsletter();
+    new Guestbook();
+    new VisitorStats();
+
     // Failsafe: Ensure loader is removed even if animation hangs
     setTimeout(() => {
         const loader = document.querySelector('.loader');
@@ -964,6 +974,170 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 3500);
 });
+
+// ============================================
+// NEWSLETTER
+// ============================================
+class Newsletter {
+    constructor() {
+        this.form = document.getElementById('newsletterForm');
+        if (this.form) this.init();
+    }
+
+    init() {
+        this.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const emailInput = this.form.querySelector('input[type="email"]');
+            const submitBtn = this.form.querySelector('button');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/newsletter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: emailInput.value })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    this.showNotification(data.message, 'success');
+                    this.form.reset();
+                } else {
+                    this.showNotification(data.error, 'error');
+                }
+            } catch (err) {
+                this.showNotification('Subscription failed. Try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+
+    showNotification(msg, type) {
+        // Reuse existing notification logic if available, or create simple alert
+        const notif = document.createElement('div');
+        notif.className = `notification ${type}`;
+        notif.style.cssText = `
+            position: fixed; bottom: 20px; right: 20px; 
+            padding: 15px 25px; border-radius: 8px; color: white;
+            background: ${type === 'success' ? '#00d4aa' : '#E50914'};
+            z-index: 10000; animation: slideIn 0.3s ease;
+        `;
+        notif.textContent = msg;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 3000);
+    }
+}
+
+// ============================================
+// GUESTBOOK
+// ============================================
+class Guestbook {
+    constructor() {
+        this.container = document.getElementById('guestbook-entries');
+        this.form = document.getElementById('guestbookForm');
+        if (this.container || this.form) this.init();
+    }
+
+    init() {
+        if (this.container) this.loadEntries();
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => this.submitEntry(e));
+        }
+    }
+
+    async loadEntries() {
+        try {
+            const res = await fetch('/api/guestbook');
+            const data = await res.json();
+            if (data.success) {
+                this.renderEntries(data.entries);
+            }
+        } catch (err) {
+            console.error('Failed to load guestbook:', err);
+        }
+    }
+
+    renderEntries(entries) {
+        this.container.innerHTML = entries.map(entry => `
+            <div class="guestbook-entry">
+                <div class="entry-header">
+                    <strong>${this.escapeHtml(entry.name)}</strong>
+                    <span class="entry-date">${entry.date}</span>
+                </div>
+                <p>${this.escapeHtml(entry.message)}</p>
+            </div>
+        `).join('');
+    }
+
+    async submitEntry(e) {
+        e.preventDefault();
+        const formData = new FormData(this.form);
+        const submitBtn = this.form.querySelector('button');
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/guestbook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.get('name'),
+                    message: formData.get('message')
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                this.loadEntries(); // Reload entries
+                this.form.reset();
+            } else {
+                alert(data.error);
+            }
+        } catch (err) {
+            alert('Failed to post entry.');
+        } finally {
+            submitBtn.disabled = false;
+        }
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}
+
+// ============================================
+// VISITOR STATS
+// ============================================
+class VisitorStats {
+    constructor() {
+        this.el = document.getElementById('visitor-count');
+        this.init();
+    }
+
+    async init() {
+        // Log visit
+        try {
+            await fetch('/api/visit', { method: 'POST' });
+            
+            // Get stats if element exists
+            if (this.el) {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                if (data.success) {
+                    this.el.textContent = data.visitors.toLocaleString();
+                }
+            }
+        } catch (err) {
+            console.error('Visitor stats error:', err);
+        }
+    }
+}
 
 // ============================================
 // PRELOAD FONTS
