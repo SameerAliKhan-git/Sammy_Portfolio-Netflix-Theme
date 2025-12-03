@@ -601,7 +601,6 @@ class ContactForm {
         submitBtn.disabled = true;
         
         try {
-        try {
             // Execute reCAPTCHA (Graceful degradation)
             let token = null;
             if (typeof grecaptcha !== 'undefined') {
