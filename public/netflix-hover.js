@@ -18,6 +18,7 @@ class NetflixHover {
     }
 
     handleMouseEnter(e, card) {
+        if (window.innerWidth <= 768) return; // Disable on mobile
         if (this.activeClone) return; // Already expanded
 
         this.hoverTimeout = setTimeout(() => {
