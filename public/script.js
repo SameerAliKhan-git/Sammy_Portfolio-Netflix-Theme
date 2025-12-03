@@ -150,7 +150,7 @@ class TypingEffect {
         this.element = document.querySelector('.role-text');
         this.roles = [
             'Full Stack Developer',
-            'Freelancer',
+            'Part-time Freelancer',
             'AI Enthusiast',
             'Finance Geek',
             'Crypto Enthusiast',
