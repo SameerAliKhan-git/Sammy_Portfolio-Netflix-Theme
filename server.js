@@ -294,17 +294,22 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         
         console.log(`📧 Contact form submission from ${name} (${email}) at ${new Date().toISOString()}`);
         
-        // 1. Insert into Database (Promisified)
-        const contactId = await new Promise((resolve, reject) => {
-            const stmt = db.prepare('INSERT INTO contacts (name, email, subject, message, ip, user_agent, email_status) VALUES (?, ?, ?, ?, ?, ?, ?)');
-            stmt.run(name, email, subject, sanitizedMessage, req.ip, req.get('User-Agent'), 'pending', function(err) {
-                if (err) reject(err);
-                else resolve(this.lastID);
+        // 1. Insert into Database (Promisified) - OPTIONAL / NON-BLOCKING
+        let contactId = 'temp_' + Date.now();
+        try {
+            contactId = await new Promise((resolve, reject) => {
+                const stmt = db.prepare('INSERT INTO contacts (name, email, subject, message, ip, user_agent, email_status) VALUES (?, ?, ?, ?, ?, ?, ?)');
+                stmt.run(name, email, subject, sanitizedMessage, req.ip, req.get('User-Agent'), 'pending', function(err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                });
+                stmt.finalize();
             });
-            stmt.finalize();
-        });
-        
-        console.log(`✅ Contact saved to DB with ID: ${contactId}`);
+            console.log(`✅ Contact saved to DB with ID: ${contactId}`);
+        } catch (dbError) {
+            console.error('⚠️ Database insertion failed (continuing to email):', dbError.message);
+            // Continue execution - do not fail the request just because DB failed
+        }
 
         // 2. Send Emails
         let emailStatus = 'skipped';
@@ -383,11 +388,17 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
             emailStatus = 'skipped_no_creds';
         }
         
-        // 3. Update Database with Email Status
-        db.run('UPDATE contacts SET email_status = ?, email_sent_at = ? WHERE id = ?', [emailStatus, emailSentAt, contactId], (err) => {
-            if (err) console.error('Error updating email status:', err);
-            else console.log(`Updated contact ${contactId} with status: ${emailStatus}`);
-        });
+        // 3. Update Database with Email Status (if DB worked)
+        if (typeof contactId === 'number') {
+            try {
+                db.run('UPDATE contacts SET email_status = ?, email_sent_at = ? WHERE id = ?', [emailStatus, emailSentAt, contactId], (err) => {
+                    if (err) console.error('Error updating email status:', err);
+                    else console.log(`Updated contact ${contactId} with status: ${emailStatus}`);
+                });
+            } catch (dbUpdateError) {
+                console.error('Error updating DB status:', dbUpdateError.message);
+            }
+        }
         
         res.json({ 
             success: true, 
