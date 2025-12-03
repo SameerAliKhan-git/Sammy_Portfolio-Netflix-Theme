@@ -70,7 +70,8 @@ app.use(helmet({
                 "https://cdnjs.cloudflare.com", 
                 "https://www.googletagmanager.com", 
                 "https://www.google.com", 
-                "https://www.gstatic.com"
+                "https://www.gstatic.com",
+                "https://va.vercel-scripts.com"
             ],
             scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
             imgSrc: ["'self'", "data:", "https:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com"],
@@ -81,7 +82,9 @@ app.use(helmet({
                 "https://www.google-analytics.com", 
                 "https://www.googletagmanager.com", 
                 "https://stats.g.doubleclick.net",
-                "https://cdn.jsdelivr.net"
+                "https://cdn.jsdelivr.net",
+                "https://va.vercel-scripts.com",
+                "https://vitals.vercel-insights.com"
             ],
             frameSrc: ["'self'", "https:", "https://www.google.com"],
             objectSrc: ["'none'"],
