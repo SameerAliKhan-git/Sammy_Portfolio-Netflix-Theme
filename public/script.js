@@ -601,8 +601,18 @@ class ContactForm {
         submitBtn.disabled = true;
         
         try {
-            // Execute reCAPTCHA
-            const token = await grecaptcha.execute('6LeraR0sAAAAAEXOwcly2wvYXOX6bSQngwswf0Un', {action: 'submit'});
+        try {
+            // Execute reCAPTCHA (Graceful degradation)
+            let token = null;
+            if (typeof grecaptcha !== 'undefined') {
+                try {
+                    token = await grecaptcha.execute('6LeraR0sAAAAAEXOwcly2wvYXOX6bSQngwswf0Un', {action: 'submit'});
+                } catch (reError) {
+                    console.warn('reCAPTCHA execution failed:', reError);
+                }
+            } else {
+                console.warn('reCAPTCHA not loaded');
+            }
             
             const formData = {
                 name: this.form.querySelector('input[name="name"]').value,

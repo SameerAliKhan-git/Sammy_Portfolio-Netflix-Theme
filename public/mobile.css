@@ -79,8 +79,11 @@
     }
 
     .nav-menu.active {
-        transform: translateX(0);
+        transform: translateX(0) !important;
         right: auto; /* Reset desktop style */
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .nav-link {
@@ -291,17 +294,27 @@
     }
 
     .hero-stat-card {
-        padding: 20px 15px;
+        padding: 15px 10px; /* Reduce padding */
         text-align: center;
         background: rgba(255, 255, 255, 0.03);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .stat-number {
-        font-size: 28px;
+        font-size: 24px; /* Slightly smaller */
+        margin-bottom: 5px;
     }
 
     .stat-label {
-        font-size: 12px;
+        font-size: 10px !important; /* Small enough to fit */
+        white-space: normal; /* Allow wrap */
+        word-wrap: break-word;
+        line-height: 1.2;
+        letter-spacing: 0.5px;
+        width: 100%;
     }
 
     /* ----------------------------------
