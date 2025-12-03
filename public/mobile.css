@@ -120,19 +120,61 @@
         color: #888;
     }
 
-    .hero-title .title-name {
-        font-size: 42px; /* Large but safe */
-        line-height: 1.1;
-        display: block;
-        background: linear-gradient(to right, #fff, #ccc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    /* Ensure Hamburger is Visible */
+    .nav-toggle {
+        display: flex !important;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        z-index: 1001;
     }
 
+    .nav-toggle span {
+        width: 30px;
+        height: 3px;
+        background: var(--primary);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+
+    /* Active Hamburger State */
+    .nav-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+    }
+
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .nav-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* Fix Title Visibility */
+    .hero-title .title-name {
+        font-size: 42px;
+        line-height: 1.1;
+        display: block;
+        color: #ffffff; /* Fallback solid color */
+        background: none; /* Remove gradient for safety */
+        -webkit-text-fill-color: #ffffff; /* Ensure fill is white */
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Add shadow for pop */
+    }
+
+    /* Fix Typing Effect Visibility */
     .hero-roles {
-        font-size: 18px;
+        font-size: 20px;
         margin-bottom: 30px;
         justify-content: center;
+        display: flex;
+        gap: 8px;
+        color: var(--primary); /* Make "I am a" primary color */
+    }
+
+    .role-text {
+        color: #ffffff; /* The typing text should be white */
+        font-weight: 700;
+        border-right: 2px solid var(--primary); /* Cursor */
     }
 
     .hero-description {
