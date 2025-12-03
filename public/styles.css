@@ -76,8 +76,16 @@ body {
     background: var(--bg-dark);
     color: var(--text-primary);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prevent horizontal scroll */
     cursor: none;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
 }
 
 body::before {
@@ -3445,8 +3453,9 @@ a, button, input, textarea, select {
 /* Mobile (max-width: 480px) */
 @media (max-width: 480px) {
     .hero-title .title-name {
-        font-size: 48px;
-        letter-spacing: 2px;
+        font-size: 32px; /* Reduced from 48px to prevent overflow */
+        letter-spacing: 1px;
+        word-wrap: break-word; /* Ensure long names wrap */
     }
 
     .hero-buttons {
