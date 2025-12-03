@@ -29,21 +29,28 @@ if (isProduction && process.env.SENTRY_DSN) {
 // ============================================
 // LOGGING
 // ============================================
-// Create logs directory if it doesn't exist
-const logsDir = path.join(__dirname, 'logs');
-if (!fs.existsSync(logsDir)) {
+// ============================================
+// LOGGING
+// ============================================
+const isVercel = process.env.VERCEL === '1';
+
+// Only create logs directory if NOT on Vercel (Read-only FS)
+const logsDir = isVercel ? '/tmp' : path.join(__dirname, 'logs');
+
+if (!isVercel && !fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// Access log stream
-const accessLogStream = fs.createWriteStream(
-    path.join(logsDir, 'access.log'),
-    { flags: 'a' }
-);
+// Access log stream - Only locally or on VPS
+if (!isVercel) {
+    const accessLogStream = fs.createWriteStream(
+        path.join(logsDir, 'access.log'),
+        { flags: 'a' }
+    );
+    app.use(morgan('combined', { stream: accessLogStream }));
+}
 
-// Use morgan for logging
-app.use(morgan('combined', { stream: accessLogStream }));
-app.use(morgan('dev')); // Console logging
+app.use(morgan('dev')); // Console logging (Captured by Vercel)
 
 // ============================================
 // SECURITY MIDDLEWARE
@@ -418,6 +425,7 @@ const cache = {
 // Load data into memory on start
 const loadCache = () => {
     try {
+        // On Vercel, logsDir is /tmp, which is empty on cold start
         if (fs.existsSync(path.join(logsDir, 'guestbook.json'))) {
             cache.guestbook = JSON.parse(fs.readFileSync(path.join(logsDir, 'guestbook.json'), 'utf8'));
         }
@@ -437,6 +445,10 @@ loadCache();
 
 // Helper to persist data asynchronously
 const persistData = (file, data) => {
+    // On Vercel, we cannot write to the filesystem (except /tmp, but it's ephemeral)
+    // So we skip persistence to avoid errors
+    if (isVercel) return;
+
     fs.writeFile(path.join(logsDir, file), JSON.stringify(data, null, 2), (err) => {
         if (err) console.error(`Error saving ${file}:`, err);
     });
