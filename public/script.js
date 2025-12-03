@@ -150,13 +150,11 @@ class TypingEffect {
         this.element = document.querySelector('.role-text');
         this.roles = [
             'Full Stack Developer',
-            'Part-time Freelancer',
+            'Freelancer',
             'AI Enthusiast',
-            'Finance Geek',
-            'Crypto Enthusiast',
-            'Fintech Enthusiast',
+            'Data Analyst',
             'Aspiring Quant',
-            'Cloud Enthusiast'
+            'Full Time Learner'
         ];
         this.currentRoleIndex = 0;
         this.currentCharIndex = 0;
