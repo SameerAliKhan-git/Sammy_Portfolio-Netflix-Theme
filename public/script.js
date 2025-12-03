@@ -261,8 +261,8 @@ class StatsCounter {
 class Navigation {
     constructor() {
         this.navbar = document.querySelector('.navbar');
-        this.toggle = document.querySelector('.nav-toggle');
-        this.menu = document.querySelector('.nav-menu');
+        this.toggle = document.getElementById('navToggle'); // Use ID for specificity
+        this.menu = document.getElementById('navMenu'); // Use ID for specificity
         this.links = document.querySelectorAll('.nav-link');
         
         // Safety: Ensure body overflow is auto on load
@@ -275,17 +275,14 @@ class Navigation {
         // Scroll effect
         window.addEventListener('scroll', () => this.handleScroll());
         
-        // Mobile toggle
+        // Mobile toggle - Direct assignment for reliability
         if (this.toggle) {
-            // Remove old listeners by cloning (optional, but good for safety if re-initializing)
-            // this.toggle.replaceWith(this.toggle.cloneNode(true));
-            // this.toggle = document.querySelector('.nav-toggle');
-            
-            this.toggle.addEventListener('click', (e) => {
+            this.toggle.onclick = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                console.log('Toggle clicked'); // Debug
                 this.toggleMenu();
-            });
+            };
         }
         
         // Close menu on link click
@@ -295,7 +292,7 @@ class Navigation {
         
         // Close menu when clicking outside
         document.addEventListener('click', (e) => {
-            if (this.menu.classList.contains('active') && 
+            if (this.menu && this.menu.classList.contains('active') && 
                 !this.menu.contains(e.target) && 
                 !this.toggle.contains(e.target)) {
                 this.closeMenu();
@@ -315,7 +312,6 @@ class Navigation {
     }
     
     toggleMenu() {
-        console.log('Toggling menu'); // Debug
         this.toggle.classList.toggle('active');
         this.menu.classList.toggle('active');
         
@@ -328,7 +324,7 @@ class Navigation {
     }
     
     closeMenu() {
-        if (this.menu.classList.contains('active')) {
+        if (this.menu && this.menu.classList.contains('active')) {
             this.toggle.classList.remove('active');
             this.menu.classList.remove('active');
             document.body.style.overflow = '';
