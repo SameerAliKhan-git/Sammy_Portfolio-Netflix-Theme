@@ -1,0 +1,338 @@
+/* ==========================================================================
+   PREMIUM MOBILE-FIRST OVERRIDE SHEET
+   "Rebuilt from Scratch" for Mobile Devices (max-width: 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    /* ----------------------------------
+       1. RESET & LAYOUT FOUNDATIONS
+       ---------------------------------- */
+    :root {
+        --mobile-padding: 24px;
+        --header-height: 70px;
+        --card-radius: 16px;
+    }
+
+    body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+        cursor: auto; /* Restore default cursor for touch */
+    }
+
+    .container {
+        width: 100%;
+        padding: 0 var(--mobile-padding);
+        max-width: 100%;
+    }
+
+    section {
+        padding: 60px 0;
+        overflow: hidden;
+    }
+
+    /* Disable Desktop Cursor Effects */
+    .cursor, .cursor-follower {
+        display: none !important;
+    }
+
+    /* ----------------------------------
+       2. NAVIGATION (App-Like Header)
+       ---------------------------------- */
+    .navbar {
+        height: var(--header-height);
+        background: rgba(10, 10, 10, 0.95); /* Darker, less transparent for readability */
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-container {
+        padding: 0 var(--mobile-padding);
+    }
+
+    .nav-logo {
+        font-size: 24px;
+    }
+
+    /* Full Screen Menu Overlay */
+    .nav-menu {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        height: calc(100vh - var(--header-height));
+        background: #000000;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 40px var(--mobile-padding);
+        gap: 30px;
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+    }
+
+    .nav-menu.active {
+        transform: translateX(0);
+        right: auto; /* Reset desktop style */
+    }
+
+    .nav-link {
+        font-size: 24px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+        width: 100%;
+        display: block;
+    }
+
+    /* ----------------------------------
+       3. HERO SECTION (Clean & Centered)
+       ---------------------------------- */
+    .hero {
+        min-height: 100vh; /* Full viewport */
+        padding-top: var(--header-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero-content {
+        padding: 0 var(--mobile-padding);
+        width: 100%;
+    }
+
+    .hero-badge {
+        margin: 0 auto 20px;
+        padding: 8px 16px;
+        width: fit-content;
+    }
+
+    .hero-title {
+        margin-bottom: 20px;
+    }
+
+    .hero-title .title-line {
+        font-size: 24px;
+        display: block;
+        margin-bottom: 10px;
+        color: #888;
+    }
+
+    .hero-title .title-name {
+        font-size: 42px; /* Large but safe */
+        line-height: 1.1;
+        display: block;
+        background: linear-gradient(to right, #fff, #ccc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-roles {
+        font-size: 18px;
+        margin-bottom: 30px;
+        justify-content: center;
+    }
+
+    .hero-description {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        padding: 0 10px;
+        color: #bbb;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 16px;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    /* Hide complex background shapes on mobile to improve performance/cleanliness */
+    .floating-shapes {
+        opacity: 0.3;
+    }
+
+    /* ----------------------------------
+       4. STATS GRID (2x2)
+       ---------------------------------- */
+    .hero-stats-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 40px;
+    }
+
+    .hero-stat-card {
+        padding: 20px 15px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .stat-number {
+        font-size: 28px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    /* ----------------------------------
+       5. NETFLIX CARDS (The "Feed" Look)
+       ---------------------------------- */
+    .netflix-row {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        padding: 0;
+    }
+
+    .netflix-card {
+        /* Reset all desktop styles */
+        height: auto !important;
+        width: 100% !important;
+        aspect-ratio: auto !important;
+        transform: none !important;
+        margin: 0 !important;
+        background: #181818;
+        border-radius: var(--card-radius);
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Image Area */
+    .netflix-card-image {
+        height: 220px !important;
+        width: 100%;
+        position: relative;
+        filter: none !important; /* No dimming */
+    }
+
+    /* Content Area */
+    .netflix-card-content {
+        position: relative !important;
+        opacity: 1 !important;
+        transform: none !important;
+        background: #181818 !important;
+        padding: 24px !important;
+        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    /* Typography inside Card */
+    .card-title {
+        font-size: 22px !important;
+        font-weight: 700;
+        margin-bottom: 12px !important;
+        color: #fff;
+    }
+
+    .card-desc {
+        font-size: 15px !important;
+        line-height: 1.5;
+        color: #ccc !important;
+        margin-bottom: 20px !important;
+        display: block !important;
+        -webkit-line-clamp: 4; /* Show plenty of text */
+    }
+
+    /* Meta Tags */
+    .card-meta {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .match-score {
+        font-size: 14px;
+    }
+
+    /* Actions */
+    .card-actions {
+        margin-top: auto;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        gap: 15px;
+    }
+
+    .action-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+    }
+
+    /* ----------------------------------
+       6. SECTIONS & TITLES
+       ---------------------------------- */
+    .section-header {
+        text-align: left;
+        margin-bottom: 30px;
+        padding-left: 10px;
+        border-left: 4px solid var(--primary);
+    }
+
+    .section-title, .netflix-section-title {
+        font-size: 28px;
+        margin: 0;
+        padding-left: 15px;
+        border: none; /* Remove duplicate border */
+    }
+
+    /* ----------------------------------
+       7. CONTACT FORM
+       ---------------------------------- */
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .contact-form {
+        padding: 24px;
+    }
+
+    .form-group input, 
+    .form-group textarea {
+        padding: 14px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+
+    /* ----------------------------------
+       8. FOOTER
+       ---------------------------------- */
+    .footer {
+        padding: 60px 0 100px; /* Extra bottom padding for mobile browsers */
+        text-align: center;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* ----------------------------------
+       9. UTILITIES
+       ---------------------------------- */
+    .mobile-hidden {
+        display: none !important;
+    }
+}
