@@ -155,10 +155,13 @@
         font-size: 42px;
         line-height: 1.1;
         display: block;
-        color: #ffffff; /* Fallback solid color */
-        background: none; /* Remove gradient for safety */
-        -webkit-text-fill-color: #ffffff; /* Ensure fill is white */
-        text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Add shadow for pop */
+        color: #ffffff !important;
+        background: none !important;
+        -webkit-text-fill-color: #ffffff !important;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: none !important; /* Disable fade-in animation */
     }
 
     /* Fix Typing Effect Visibility */
@@ -168,13 +171,18 @@
         justify-content: center;
         display: flex;
         gap: 8px;
-        color: var(--primary); /* Make "I am a" primary color */
+        color: var(--primary);
+        opacity: 1 !important;
+        visibility: visible !important;
+        animation: none !important;
     }
 
     .role-text {
-        color: #ffffff; /* The typing text should be white */
+        color: #ffffff !important;
         font-weight: 700;
-        border-right: 2px solid var(--primary); /* Cursor */
+        border-right: 2px solid var(--primary);
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .hero-description {
