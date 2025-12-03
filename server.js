@@ -60,12 +60,30 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com", "https://cdn.jsdelivr.net"],
             fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com", "data:"],
-            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
-            imgSrc: ["'self'", "data:", "https:", "blob:"],
-            connectSrc: ["'self'", "https://api.github.com", "https://github-contributions-api.jogruber.de"],
-            frameSrc: ["'self'", "https:"],
+            scriptSrc: [
+                "'self'", 
+                "'unsafe-inline'", 
+                "'unsafe-eval'", 
+                "https://cdn.jsdelivr.net", 
+                "https://cdnjs.cloudflare.com", 
+                "https://www.googletagmanager.com", 
+                "https://www.google.com", 
+                "https://www.gstatic.com"
+            ],
+            scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
+            imgSrc: ["'self'", "data:", "https:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com"],
+            connectSrc: [
+                "'self'", 
+                "https://api.github.com", 
+                "https://github-contributions-api.jogruber.de", 
+                "https://www.google-analytics.com", 
+                "https://www.googletagmanager.com", 
+                "https://stats.g.doubleclick.net",
+                "https://cdn.jsdelivr.net"
+            ],
+            frameSrc: ["'self'", "https:", "https://www.google.com"],
             objectSrc: ["'none'"],
             workerSrc: ["'self'"],
             upgradeInsecureRequests: isProduction ? [] : null,
