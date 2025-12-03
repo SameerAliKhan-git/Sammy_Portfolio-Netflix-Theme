@@ -270,8 +270,6 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         const { recaptchaToken } = req.body;
 
         // Verify reCAPTCHA
-        // Only verify if secret key is present (allows local testing without it if needed, but user asked for integration)
-        // Ideally, we should enforce it.
         if (process.env.RECAPTCHA_SECRET_KEY) {
             const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
             

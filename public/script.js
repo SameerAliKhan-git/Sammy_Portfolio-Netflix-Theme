@@ -320,6 +320,7 @@ class Navigation {
         if (this.menu && this.menu.classList.contains('active')) {
             this.toggle.classList.remove('active');
             this.menu.classList.remove('active');
+            this.menu.style.transform = 'translateX(100%)'; // Reset inline style
             document.body.style.overflow = '';
         }
     }
@@ -625,14 +626,17 @@ class ContactForm {
             const result = await response.json();
             
             if (response.ok) {
-                // Show in-place success message
-                this.form.classList.add('success-state');
-                this.form.reset();
+                // Show clear success notification
+                this.showNotification('Message sent successfully! I will get back to you soon.', 'success');
                 
-                // Restore form after 7 seconds
+                // Turn form fields green
+                this.form.classList.add('success-state');
+                
+                // Reset form after delay
                 setTimeout(() => {
+                    this.form.reset();
                     this.form.classList.remove('success-state');
-                }, 7000);
+                }, 15000);
             } else {
                 this.showNotification(result.message || 'Failed to send message', 'error');
             }
@@ -646,62 +650,34 @@ class ContactForm {
     }
     
     showNotification(message, type) {
-        if (type === 'success') {
-            const modal = document.createElement('div');
-            modal.className = 'netflix-modal-overlay';
-            modal.innerHTML = `
-                <div class="netflix-modal">
-                    <div class="modal-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h3>Message Sent!</h3>
-                    <p>${message}</p>
-                    <button class="btn btn-netflix-primary" style="width: 100%; justify-content: center;" onclick="this.closest('.netflix-modal-overlay').remove()">OK</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Close on click outside
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.remove();
-            });
-        } else {
-            // Create notification element (Toast for errors)
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                <span>${message}</span>
-            `;
-            
-            // Add styles
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 30px;
-                padding: 15px 25px;
-                background: ${type === 'success' ? '#00d4aa' : '#E50914'};
-                color: white;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-size: 14px;
-                font-weight: 500;
-                z-index: 10000;
-                animation: slideIn 0.3s ease;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease forwards';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
+        // Remove existing toast if any
+        const existingToast = document.querySelector('.notification-toast');
+        if (existingToast) existingToast.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `notification-toast ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        
+        toast.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span>${message}</span>
+        `;
+
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        // Remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
+
 }
 
 // ============================================
