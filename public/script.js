@@ -287,18 +287,18 @@ class Navigation {
                 e.preventDefault();
                 e.stopPropagation();
                 
-                const isActive = navMenu.classList.contains('active');
+                // Toggle Active Class
+                navMenu.classList.toggle('active');
+                toggleBtn.classList.toggle('active');
                 
-                if (isActive) {
-                    navMenu.classList.remove('active');
-                    toggleBtn.classList.remove('active');
-                    document.body.style.overflow = '';
-                } else {
-                    navMenu.classList.add('active');
-                    toggleBtn.classList.add('active');
+                // Manage Body Scroll
+                if (navMenu.classList.contains('active')) {
                     document.body.style.overflow = 'hidden';
+                    console.log('Menu OPENED');
+                } else {
+                    document.body.style.overflow = '';
+                    console.log('Menu CLOSED');
                 }
-                console.log('Menu toggled. Active:', !isActive);
             });
         }
         

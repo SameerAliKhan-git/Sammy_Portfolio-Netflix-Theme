@@ -448,8 +448,19 @@
         gap: 40px;
     }
 
+    .contact-content {
+        display: flex !important;
+        flex-direction: column !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
     .contact-form {
         padding: 24px;
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
     }
 
     .form-group input, 
