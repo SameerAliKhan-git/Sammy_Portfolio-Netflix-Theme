@@ -317,12 +317,14 @@ class Navigation {
     }
     
     closeMenu() {
-        if (this.menu && this.menu.classList.contains('active')) {
-            this.toggle.classList.remove('active');
-            this.menu.classList.remove('active');
-            this.menu.style.transform = 'translateX(100%)'; // Reset inline style
-            document.body.style.overflow = '';
-        }
+        // Force close by removing classes and resetting styles
+        this.toggle.classList.remove('active');
+        this.menu.classList.remove('active');
+        
+        // IMPORTANT: Reset the inline transform set by the HTML onclick
+        this.menu.style.transform = ''; 
+        
+        document.body.style.overflow = '';
     }
     
     updateActiveLink() {
