@@ -275,32 +275,8 @@ class Navigation {
         // Scroll effect
         window.addEventListener('scroll', () => this.handleScroll());
         
-        // Mobile toggle - Robust Event Listener
-        const toggleBtn = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
-        
-        if (toggleBtn && navMenu) {
-            // Remove any existing inline handlers to prevent conflicts
-            toggleBtn.removeAttribute('onclick');
-            
-            toggleBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                // Toggle Active Class
-                navMenu.classList.toggle('active');
-                toggleBtn.classList.toggle('active');
-                
-                // Manage Body Scroll
-                if (navMenu.classList.contains('active')) {
-                    document.body.style.overflow = 'hidden';
-                    console.log('Menu OPENED');
-                } else {
-                    document.body.style.overflow = '';
-                    console.log('Menu CLOSED');
-                }
-            });
-        }
+        // Mobile toggle handled by inline onclick in index.html for maximum reliability
+        // See index.html: <button ... onclick="...">
         
         // Close menu on link click
         this.links.forEach(link => {
