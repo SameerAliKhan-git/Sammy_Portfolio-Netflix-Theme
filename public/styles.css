@@ -3350,13 +3350,30 @@ a, button, input, textarea, select {
     }
 
     .netflix-card {
-        margin-bottom: 20px;
+        margin-bottom: 30px; /* More spacing */
+        aspect-ratio: 4/3; /* Taller card for mobile */
     }
 
     .netflix-card:hover,
     .netflix-card.mobile-active {
-        transform: scale(1.05); /* Reduced scale for mobile */
+        transform: scale(1.05);
         z-index: 100;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    }
+
+    .netflix-card.mobile-active .netflix-card-content {
+        opacity: 1;
+        transform: translateY(0);
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 50%, transparent 100%);
+    }
+
+    .netflix-card.mobile-active .card-title {
+        font-size: 18px; /* Larger title on mobile */
+    }
+
+    .netflix-card.mobile-active .card-desc {
+        font-size: 12px;
+        -webkit-line-clamp: 3; /* Show more lines */
     }
 
     /* Contact Section */
