@@ -265,6 +265,9 @@ class Navigation {
         this.menu = document.querySelector('.nav-menu');
         this.links = document.querySelectorAll('.nav-link');
         
+        // Safety: Ensure body overflow is auto on load
+        document.body.style.overflow = '';
+        
         this.init();
     }
     
@@ -274,12 +277,29 @@ class Navigation {
         
         // Mobile toggle
         if (this.toggle) {
-            this.toggle.addEventListener('click', () => this.toggleMenu());
+            // Remove old listeners by cloning (optional, but good for safety if re-initializing)
+            // this.toggle.replaceWith(this.toggle.cloneNode(true));
+            // this.toggle = document.querySelector('.nav-toggle');
+            
+            this.toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleMenu();
+            });
         }
         
         // Close menu on link click
         this.links.forEach(link => {
             link.addEventListener('click', () => this.closeMenu());
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (this.menu.classList.contains('active') && 
+                !this.menu.contains(e.target) && 
+                !this.toggle.contains(e.target)) {
+                this.closeMenu();
+            }
         });
         
         // Active link on scroll
@@ -295,15 +315,24 @@ class Navigation {
     }
     
     toggleMenu() {
+        console.log('Toggling menu'); // Debug
         this.toggle.classList.toggle('active');
         this.menu.classList.toggle('active');
-        document.body.style.overflow = this.menu.classList.contains('active') ? 'hidden' : '';
+        
+        // Toggle body scroll
+        if (this.menu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     }
     
     closeMenu() {
-        this.toggle.classList.remove('active');
-        this.menu.classList.remove('active');
-        document.body.style.overflow = '';
+        if (this.menu.classList.contains('active')) {
+            this.toggle.classList.remove('active');
+            this.menu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
     
     updateActiveLink() {
