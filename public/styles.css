@@ -3350,48 +3350,49 @@ a, button, input, textarea, select {
     }
 
     /* Mobile Card - Static Layout (Always Visible) */
+    /* Mobile Card - Structured Stack Layout */
     .netflix-card {
         margin-bottom: 25px;
-        height: auto; /* Let content dictate height */
-        min-height: 400px;
+        height: auto;
         width: 100%;
-        position: relative;
+        display: flex;
+        flex-direction: column;
+        background: #181818; /* Solid card background */
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        transform: none !important; /* Disable scaling */
+        transform: none !important;
         transition: none;
+        border: 1px solid #333;
     }
 
     .netflix-card:hover,
     .netflix-card.mobile-active {
         transform: none !important;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        border: none;
+        border: 1px solid #333;
         z-index: 1;
     }
 
     .netflix-card-image {
-        height: 250px; /* Fixed image height */
+        height: 200px; /* Fixed height for image area */
         width: 100%;
-        filter: brightness(0.8); /* Slight dim for consistency */
+        position: relative;
+        flex-shrink: 0;
+        filter: none; /* Full brightness */
     }
 
     .netflix-card-content {
-        position: relative; /* Stack below image? No, let's overlay but permanent */
-        position: absolute;
-        bottom: 0;
-        left: 0;
+        position: relative; /* Normal flow */
         width: 100%;
         height: auto;
-        opacity: 1 !important; /* Always visible */
-        transform: translateY(0) !important;
-        background: linear-gradient(to top, #000 0%, rgba(0,0,0,0.95) 60%, transparent 100%);
+        opacity: 1 !important;
+        transform: none !important;
+        background: #181818; /* Match card bg */
         padding: 20px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-        padding-top: 60px; /* Gradient fade space */
+        justify-content: flex-start;
     }
 
     .card-title {
