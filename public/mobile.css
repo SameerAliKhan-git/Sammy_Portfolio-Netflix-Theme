@@ -14,11 +14,15 @@
         --card-radius: 16px;
     }
 
-    body {
+    html, body {
         overflow-x: hidden;
+        overflow-y: auto; /* Force vertical scroll */
         width: 100%;
         position: relative;
-        cursor: auto; /* Restore default cursor for touch */
+        cursor: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+        height: auto; /* Allow body to grow */
+        min-height: 100vh;
     }
 
     .container {
@@ -29,7 +33,7 @@
 
     section {
         padding: 60px 0;
-        overflow: hidden;
+        overflow: visible; /* Fix: Allow content to flow */
     }
 
     /* Disable Desktop Cursor Effects */
@@ -191,6 +195,12 @@
         display: block;
     }
 
+    /* AUTO GLITCH EFFECT */
+    @keyframes autoGlitchOpacity {
+        0%, 63% { opacity: 0; }
+        64%, 100% { opacity: 0.8; }
+    }
+
     .hero-title .title-name {
         font-size: 42px;
         line-height: 1.1;
@@ -200,13 +210,40 @@
         -webkit-text-fill-color: #ffffff !important;
         text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         margin-bottom: 15px;
+        position: relative;
+    }
+
+    /* Apply Auto Glitch */
+    .hero-title .title-name::before,
+    .hero-title .title-name::after {
+        content: "Sameer Ali Khan"; /* Hardcoded for glitch stability */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        background: #000; /* Match bg to hide main text */
+    }
+
+    .hero-title .title-name::before {
+        color: #0ff;
+        animation: glitch-1 0.3s linear infinite, autoGlitchOpacity 11s linear infinite;
+        z-index: -1;
+    }
+
+    .hero-title .title-name::after {
+        color: #f0f;
+        animation: glitch-2 0.3s linear infinite, autoGlitchOpacity 11s linear infinite;
+        z-index: -2;
     }
 
     .hero-roles {
-        font-size: 20px;
+        font-size: 18px; /* Reduced from 20px */
         margin-bottom: 20px;
         justify-content: center;
         display: flex;
+        flex-wrap: wrap; /* Allow wrapping if needed */
         gap: 8px;
         color: #E50914 !important; /* Primary Red */
     }
