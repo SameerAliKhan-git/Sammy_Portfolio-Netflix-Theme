@@ -70,7 +70,8 @@ app.use(helmet({
                 "https://cdnjs.cloudflare.com", 
                 "https://www.googletagmanager.com", 
                 "https://www.google.com", 
-                "https://www.gstatic.com"
+                "https://www.gstatic.com",
+                "https://cdn.vercel-insights.com"
             ],
             scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
             imgSrc: ["'self'", "data:", "https:", "blob:", "https://www.google-analytics.com", "https://www.googletagmanager.com"],
@@ -81,7 +82,8 @@ app.use(helmet({
                 "https://www.google-analytics.com", 
                 "https://www.googletagmanager.com", 
                 "https://stats.g.doubleclick.net",
-                "https://cdn.jsdelivr.net"
+                "https://cdn.jsdelivr.net",
+                "https://vitals.vercel-insights.com"
             ],
             frameSrc: ["'self'", "https:", "https://www.google.com"],
             objectSrc: ["'none'"],
@@ -402,7 +404,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
                 emailStatus = 'failed';
             }
         } else {
-            console.log('⚠️ SMTP credentials not found. Emails not sent.');
+            console.log('��️ SMTP credentials not found. Emails not sent.');
             emailStatus = 'skipped_no_creds';
         }
         
