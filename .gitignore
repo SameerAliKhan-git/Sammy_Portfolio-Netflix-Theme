@@ -6,3 +6,7 @@ logs/
 .DS_Store
 
 /generated/prisma
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
