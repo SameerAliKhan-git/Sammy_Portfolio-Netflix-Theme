@@ -4,3 +4,5 @@ portfolio.db
 logs/
 *.log
 .DS_Store
+
+/generated/prisma

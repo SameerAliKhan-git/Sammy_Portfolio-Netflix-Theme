@@ -1157,13 +1157,15 @@ if ('fonts' in document) {
 }
 
 // ============================================
-// MOBILE NAVIGATION
+// MOBILE NAVIGATION - Fixed for Full Screen Overlay
 // ============================================
 class MobileNavigation {
     constructor() {
         this.navToggle = document.getElementById('navToggle');
         this.navMenu = document.getElementById('navMenu');
         this.navLinks = document.querySelectorAll('.nav-link');
+        this.isOpen = false;
+        this.scrollPosition = 0;
         
         if (this.navToggle && this.navMenu) {
             this.init();
@@ -1171,38 +1173,125 @@ class MobileNavigation {
     }
     
     init() {
-        // Toggle Menu
-        this.navToggle.addEventListener('click', () => {
-            this.toggleMenu();
+        // Use a flag to prevent double triggering on touch devices
+        let touchHandled = false;
+
+        // Toggle Menu on touch for mobile (fires before click)
+        this.navToggle.addEventListener('touchstart', (e) => {
+            touchHandled = true;
+        }, { passive: true });
+
+        this.navToggle.addEventListener('touchend', (e) => {
+            if (touchHandled) {
+                e.preventDefault();
+                this.toggleMenu();
+                // Reset flag after a short delay
+                setTimeout(() => { touchHandled = false; }, 300);
+            }
+        }, { passive: false });
+        
+        // Toggle Menu on click (for desktop and fallback)
+        this.navToggle.addEventListener('click', (e) => {
+            if (!touchHandled) {
+                e.preventDefault();
+                this.toggleMenu();
+            }
+            touchHandled = false;
         });
         
-        // Close menu when clicking a link
+        // Close menu when clicking a link and navigate to section
         this.navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (this.navMenu.classList.contains('active')) {
-                    this.toggleMenu();
+            link.addEventListener('click', (e) => {
+                if (this.isOpen) {
+                    const targetHref = link.getAttribute('href');
+                    
+                    // Close menu first without restoring scroll position
+                    this.closeMenu(false);
+                    
+                    // If it's an anchor link, navigate after menu closes
+                    if (targetHref && targetHref.startsWith('#')) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(targetHref);
+                        if (targetElement) {
+                            // Small delay to allow menu close animation
+                            setTimeout(() => {
+                                targetElement.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
+                        }
+                    }
                 }
             });
         });
         
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (this.navMenu.classList.contains('active') && 
-                !this.navMenu.contains(e.target) && 
-                !this.navToggle.contains(e.target)) {
-                this.toggleMenu();
+        // Close menu when clicking outside (on the menu backdrop)
+        this.navMenu.addEventListener('click', (e) => {
+            if (e.target === this.navMenu) {
+                this.closeMenu();
+            }
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.closeMenu();
+            }
+        });
+
+        // Handle resize - close menu if window becomes larger than mobile
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && this.isOpen) {
+                this.closeMenu();
             }
         });
     }
     
     toggleMenu() {
-        this.navMenu.classList.toggle('active');
-        this.navToggle.classList.toggle('active');
+        if (this.isOpen) {
+            this.closeMenu();
+        } else {
+            this.openMenu();
+        }
+    }
+
+    openMenu() {
+        this.isOpen = true;
+        
+        // Save scroll position before locking
+        this.scrollPosition = window.pageYOffset;
+        
+        // Add active classes
+        this.navMenu.classList.add('active');
+        this.navToggle.classList.add('active');
+        document.body.classList.add('menu-open');
+        
+        // Lock body scroll at current position
+        document.body.style.top = `-${this.scrollPosition}px`;
         
         // Animate hamburger
         const hamburger = this.navToggle.querySelector('.hamburger');
         if (hamburger) {
-            hamburger.classList.toggle('active');
+            hamburger.classList.add('active');
+        }
+    }
+
+    closeMenu(restoreScroll = true) {
+        this.isOpen = false;
+        
+        // Remove active classes
+        this.navMenu.classList.remove('active');
+        this.navToggle.classList.remove('active');
+        document.body.classList.remove('menu-open');
+        
+        // Restore body scroll position only if requested
+        document.body.style.top = '';
+        if (restoreScroll) {
+            window.scrollTo(0, this.scrollPosition);
+        }
+        
+        // Animate hamburger
+        const hamburger = this.navToggle.querySelector('.hamburger');
+        if (hamburger) {
+            hamburger.classList.remove('active');
         }
     }
 }

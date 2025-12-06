@@ -29,10 +29,12 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@prisma/client": "^7.1.0",
     "clean-css-cli": "^5.6.3",
     "jest": "^30.2.0",
     "lighthouse": "^11.0.0",
     "nodemon": "^3.1.11",
+    "prisma": "^7.1.0",
     "supertest": "^7.1.4",
     "uglify-js": "^3.19.3"
   },
